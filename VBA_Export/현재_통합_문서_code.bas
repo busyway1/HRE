@@ -33,22 +33,22 @@ End Sub
 Private Sub Workbook_Open()
     On Error Resume Next
     LogData_Access Me.Name, "실행"
-    ThisWorkbook.Worksheets("HideSheet").Range("N2").Value = AppVersion
+    HideSheet.Range("N2").Value = AppVersion
 '    If Not IsPermittedEmail() Then
 '        Msg "이용 권한이 없습니다!", vbCritical
 '        ThisWorkbook.Close SaveChanges:=False
 '    End If
 
     ' HRE - Core sheets protection (removed MC-related sheets)
-    ThisWorkbook.Worksheets("CoAMaster").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
-    ThisWorkbook.Worksheets("CorpCoA").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
-    ThisWorkbook.Worksheets("BSPL").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
-    ThisWorkbook.Worksheets("CorpMaster").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
-    ThisWorkbook.Worksheets("Verify").Protect PASSWORD_WS, UserInterfaceOnly:=True
-    ThisWorkbook.Worksheets("Check").Protect PASSWORD_WS, UserInterfaceOnly:=True
-    ThisWorkbook.Worksheets("ADBS").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
-    ThisWorkbook.Worksheets("AddCoA_ADBS").Protect PASSWORD_WS, UserInterfaceOnly:=True
-    ThisWorkbook.Worksheets("AddCoA").Protect PASSWORD_WS, UserInterfaceOnly:=True
+    CoAMaster.Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
+    CorpCoA.Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
+    BSPL.Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
+    CorpMaster.Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
+    Verify.Protect PASSWORD_WS, UserInterfaceOnly:=True
+    Check.Protect PASSWORD_WS, UserInterfaceOnly:=True
+    ADBS.Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
+    AddCoA_ADBS.Protect PASSWORD_WS, UserInterfaceOnly:=True
+    AddCoA.Protect PASSWORD_WS, UserInterfaceOnly:=True
 
     ' HRE - Optional: Protect exchange rate sheets if they exist
     On Error Resume Next
