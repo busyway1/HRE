@@ -25,12 +25,14 @@ Private Const PASSWORD_WS As String = "BEP1234" ' 워크시트 잠금 PASSWORD
 Private Const PASSWORD_WB As String = "PwCDA7529"
 
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
-    LogData_Access ThisWorkbook.Name, "종료"
+    On Error Resume Next
+    LogData_Access Me.Name, "종료"
     Application.CommandBars("Queries and Connections").Enabled = True
 End Sub
 
 Private Sub Workbook_Open()
-    LogData_Access ThisWorkbook.Name, "실행"
+    On Error Resume Next
+    LogData_Access Me.Name, "실행"
     HideSheet.Range("N2").Value = AppVersion
 '    If Not IsPermittedEmail() Then
 '        Msg "이용 권한이 없습니다!", vbCritical
