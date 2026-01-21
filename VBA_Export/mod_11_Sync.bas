@@ -1,4 +1,5 @@
 Attribute VB_Name = "mod_11_Sync"
+Option Explicit
 ' ============================================================================
 ' Module: mod_11_Sync
 ' Project: HRE 연결마스터 (Consolidation Master)
