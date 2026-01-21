@@ -66,7 +66,9 @@ VBA UTF-8 → CP949 변환 시작
 
 ---
 
-### 3단계: VBA Editor에서 파일 가져오기
+### 3단계: VBA Editor에서 코드 Import
+
+⚠️ **중요**: 파일 유형에 따라 import 방법이 다릅니다!
 
 #### 3-1. Excel 파일 열기
 - `연결마스터_HRE_v1.00.xlsm` 파일 열기
@@ -76,17 +78,38 @@ VBA UTF-8 → CP949 변환 시작
 - `Alt + F11` 키 또는
 - 개발 도구 탭 → Visual Basic
 
-#### 3-3. 모듈 가져오기
+#### 3-3A. 일반 모듈 - 파일 가져오기 (22개)
 1. **파일 → 파일 가져오기** (File → Import File)
 2. `VBA_Export` 폴더로 이동
-3. 변환된 `.bas` 파일들 선택
-   - `Ctrl + A` (전체 선택) 또는
-   - `Ctrl + 클릭` (개별 선택)
+3. 다음 파일들 선택:
+   - `mod_*.bas` (19개)
+   - US-ASCII 파일들 (13개)
 4. **열기** 클릭
+5. 기존 모듈 교체 **"예"** 선택
 
-#### 3-4. 기존 모듈 교체 확인
-- 같은 이름의 모듈이 있으면 교체 여부 확인
-- **"예"** 선택하여 기존 모듈 교체
+#### 3-3B. ThisWorkbook - 복사 붙여넣기 ⚠️
+**`현재_통합_문서_code.bas`는 파일 가져오기 불가!**
+
+1. VS Code 또는 메모장에서 `현재_통합_문서_code.bas` 열기
+2. **`Option Explicit`부터 마지막까지** 전체 복사 (Ctrl+A, Ctrl+C)
+   - ⚠️ 주의: `VERSION`, `Attribute` 줄은 제외
+3. VBA Editor → **ThisWorkbook** 더블클릭
+4. 기존 코드 전체 삭제 (Ctrl+A, Delete)
+5. 붙여넣기 (Ctrl+V)
+6. 저장 (Ctrl+S)
+
+#### 3-3C. CoAMaster Sheet - 복사 붙여넣기 ⚠️
+**`CoAMaster_code.bas`는 파일 가져오기 불가!**
+
+1. VS Code 또는 메모장에서 `CoAMaster_code.bas` 열기
+2. **`Option Explicit`부터 마지막까지** 전체 복사
+3. VBA Editor → **Microsoft Excel Objects** → **CoAMaster** 더블클릭
+4. 기존 코드 전체 삭제
+5. 붙여넣기
+6. 저장
+
+#### 상세 가이드
+복사-붙여넣기 방법은 `VBA_Import_가이드.md` 참조
 
 ---
 
