@@ -16,19 +16,19 @@ Option Explicit
 ' Dependencies:
 '   - mod_10_Public.bas (SpeedUp, SpeedDown, OpenProgress, CalculateProgress)
 '   - CoAMaster worksheet with "Master" ListObject table
-'   - coa.md file at /Users/jaewookim/Desktop/Project/HRE/ì°¸ê³ /VBA_Export/coa.md
+'   - coa.md file at /Users/jaewookim/Desktop/Project/HRE/Âü°í/VBA_Export/coa.md
 '
 ' Master Table Structure (10 columns):
 '   1. Account - PwC 6-digit consolidated account code (PRIMARY KEY)
 '   2. Description - English account description
-'   3. ì—°ê²°ê³„ì •ëª… - Korean account name
-'   4. ë¶„ë¥˜ - Korean classification (ìœ ë™ìì‚°, ë¹„ìœ ë™ë¶€ì±„, etc.)
+'   3. ¿¬°á°èÁ¤¸í - Korean account name
+'   4. ºĞ·ù - Korean classification (À¯µ¿ÀÚ»ê, ºñÀ¯µ¿ºÎÃ¤, etc.)
 '   5. Category - English classification (Current asset, etc.)
-'   6. BSPL - Financial statement type (BS ìì‚°, BS ë¶€ì±„, BS ì§€ë¶„, IS)
-'   7. ëŒ€ë¶„ë¥˜ - Major classification (ìì‚°, ë¶€ì±„, ìë³¸, ìˆ˜ìµ, ë¹„ìš©)
+'   6. BSPL - Financial statement type (BS ÀÚ»ê, BS ºÎÃ¤, BS ÁöºĞ, IS)
+'   7. ´ëºĞ·ù - Major classification (ÀÚ»ê, ºÎÃ¤, ÀÚº», ¼öÀÍ, ºñ¿ë)
 '   8. Ranking - Sequential ranking (110, 120, 130...)
-'   9. ë¶€í˜¸ - Sign (D for debit accounts, C for credit accounts)
-'   10. ê¸ˆì•¡ - Amount (initialized to 0)
+'   9. ºÎÈ£ - Sign (D for debit accounts, C for credit accounts)
+'   10. ±İ¾× - Amount (initialized to 0)
 '==============================================================================
 
 Sub PopulateCoAMaster()
@@ -38,7 +38,7 @@ Sub PopulateCoAMaster()
     ' Process Flow:
     '   1. Validate prerequisites (worksheet and table existence)
     '   2. Read and parse coa.md file
-    '   3. Transform data (derive BSPL, ëŒ€ë¶„ë¥˜, ë¶€í˜¸)
+    '   3. Transform data (derive BSPL, ´ëºĞ·ù, ºÎÈ£)
     '   4. Bulk insert data into Master table
     '   5. Format and protect worksheet
     '
@@ -63,8 +63,8 @@ Sub PopulateCoAMaster()
     Dim fileStream As Object
 
     ' Display progress indicator
-    Call OpenProgress("CoA Master ë°ì´í„° ì´ˆê¸°í™” ì¤‘...")
-    Call CalculateProgress(0.1, "Master í…Œì´ë¸” ê²€ì¦ ì¤‘...")
+    Call OpenProgress("CoA Master µ¥ÀÌÅÍ ÃÊ±âÈ­ Áß...")
+    Call CalculateProgress(0.1, "Master Å×ÀÌºí °ËÁõ Áß...")
 
     '==========================================================================
     ' STEP 1: Validate CoAMaster worksheet and Master table
@@ -74,21 +74,21 @@ Sub PopulateCoAMaster()
     On Error GoTo ErrorHandler
 
     If tblMaster Is Nothing Then
-        GoEnd "CoAMaster ì‹œíŠ¸ì˜ 'Master' í…Œì´ë¸”ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤!"
+        GoEnd "CoAMaster ½ÃÆ®ÀÇ 'Master' Å×ÀÌºíÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù!"
     End If
 
     '==========================================================================
     ' STEP 2: Read coa.md file
     '==========================================================================
-    Call CalculateProgress(0.2, "coa.md íŒŒì¼ ì½ëŠ” ì¤‘...")
+    Call CalculateProgress(0.2, "coa.md ÆÄÀÏ ÀĞ´Â Áß...")
 
-    coaFilePath = "/Users/jaewookim/Desktop/Project/HRE/ì°¸ê³ /VBA_Export/coa.md"
+    coaFilePath = "/Users/jaewookim/Desktop/Project/HRE/Âü°í/VBA_Export/coa.md"
 
     ' Create FileSystemObject for UTF-8 file reading
     Set fso = CreateObject("Scripting.FileSystemObject")
 
     If Not fso.FileExists(coaFilePath) Then
-        GoEnd "coa.md íŒŒì¼ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤: " & coaFilePath
+        GoEnd "coa.md ÆÄÀÏÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù: " & coaFilePath
     End If
 
     ' Read file using ADODB.Stream for UTF-8 support
@@ -109,13 +109,13 @@ Sub PopulateCoAMaster()
     rowCount = UBound(coaData) + 1
 
     If rowCount < 2 Then
-        GoEnd "coa.md íŒŒì¼ì´ ë¹„ì–´ìˆê±°ë‚˜ í˜•ì‹ì´ ì˜¬ë°”ë¥´ì§€ ì•ŠìŠµë‹ˆë‹¤!"
+        GoEnd "coa.md ÆÄÀÏÀÌ ºñ¾îÀÖ°Å³ª Çü½ÄÀÌ ¿Ã¹Ù¸£Áö ¾Ê½À´Ï´Ù!"
     End If
 
     '==========================================================================
     ' STEP 3: Parse data and build array (rows 2 to end, skip header row 1)
     '==========================================================================
-    Call CalculateProgress(0.3, "ë°ì´í„° íŒŒì‹± ì¤‘...")
+    Call CalculateProgress(0.3, "µ¥ÀÌÅÍ ÆÄ½Ì Áß...")
 
     ' Allocate array for maximum possible rows (subtract header row)
     ReDim masterArray(1 To rowCount - 1, 1 To 10)
@@ -124,7 +124,7 @@ Sub PopulateCoAMaster()
     For i = 1 To rowCount - 1 ' Skip row 0 (header)
         If i Mod 20 = 0 Then
             Call CalculateProgress(0.3 + (0.4 * i / rowCount), _
-                "ë°ì´í„° íŒŒì‹± ì¤‘... (" & i & "/" & (rowCount - 1) & ")")
+                "µ¥ÀÌÅÍ ÆÄ½Ì Áß... (" & i & "/" & (rowCount - 1) & ")")
         End If
 
         ' Parse tab-delimited row
@@ -141,11 +141,11 @@ Sub PopulateCoAMaster()
 
         ' Extract data from coa.md columns (0-based index)
         ' Column 7 (index 6) = Account, Column 8 (index 7) = Description
-        ' Column 2 (index 1) = ì—°ê²°ê³„ì •ëª…, Column 5 (index 4) = ë¶„ë¥˜, Column 6 (index 5) = Category
+        ' Column 2 (index 1) = ¿¬°á°èÁ¤¸í, Column 5 (index 4) = ºĞ·ù, Column 6 (index 5) = Category
         accountCode = Trim(rowData(6))      ' Column 7: Account
         accountDesc = Trim(rowData(7))      ' Column 8: Description
-        coaName = Trim(rowData(1))          ' Column 2: ì—°ê²°ê³„ì •ëª…
-        classification = Trim(rowData(4))   ' Column 5: ë¶„ë¥˜
+        coaName = Trim(rowData(1))          ' Column 2: ¿¬°á°èÁ¤¸í
+        classification = Trim(rowData(4))   ' Column 5: ºĞ·ù
         category = Trim(rowData(5))         ' Column 6: Category
 
         ' Skip if Account code is empty or invalid
@@ -171,51 +171,51 @@ Sub PopulateCoAMaster()
         ' Column 2: Description (English)
         masterArray(validRows, 2) = accountDesc
 
-        ' Column 3: ì—°ê²°ê³„ì •ëª… (Korean account name)
+        ' Column 3: ¿¬°á°èÁ¤¸í (Korean account name)
         masterArray(validRows, 3) = coaName
 
-        ' Column 4: ë¶„ë¥˜ (Korean classification)
+        ' Column 4: ºĞ·ù (Korean classification)
         masterArray(validRows, 4) = classification
 
         ' Column 5: Category (English classification)
         masterArray(validRows, 5) = category
 
         ' Column 6: BSPL - Derive from Account code pattern
-        ' 1xxxxx = BS ìì‚° (Balance Sheet Asset)
-        ' 2xxxxx = BS ë¶€ì±„ (Balance Sheet Liability)
-        ' 3xxxxx = BS ì§€ë¶„ (Balance Sheet Equity)
+        ' 1xxxxx = BS ÀÚ»ê (Balance Sheet Asset)
+        ' 2xxxxx = BS ºÎÃ¤ (Balance Sheet Liability)
+        ' 3xxxxx = BS ÁöºĞ (Balance Sheet Equity)
         ' 4xxxxx, 5xxxxx, 8xxxxx, 9xxxxx = IS (Income Statement)
         masterArray(validRows, 6) = DeriveBSPL(accountCode)
 
-        ' Column 7: ëŒ€ë¶„ë¥˜ - Derive from ë¶„ë¥˜ field
-        ' ìœ ë™ìì‚°, ë¹„ìœ ë™ìì‚° â†’ ìì‚°
-        ' ìœ ë™ë¶€ì±„, ë¹„ìœ ë™ë¶€ì±„ â†’ ë¶€ì±„
-        ' ìë³¸ â†’ ìë³¸
-        ' ë§¤ì¶œì•¡, ë§¤ì¶œì›ê°€ â†’ ìˆ˜ìµ/ë¹„ìš©
-        ' íŒê´€ë¹„, ì˜ì—…ì™¸ì†ìµ â†’ ë¹„ìš©
-        masterArray(validRows, 7) = DeriveëŒ€ë¶„ë¥˜(classification)
+        ' Column 7: ´ëºĞ·ù - Derive from ºĞ·ù field
+        ' À¯µ¿ÀÚ»ê, ºñÀ¯µ¿ÀÚ»ê ¡æ ÀÚ»ê
+        ' À¯µ¿ºÎÃ¤, ºñÀ¯µ¿ºÎÃ¤ ¡æ ºÎÃ¤
+        ' ÀÚº» ¡æ ÀÚº»
+        ' ¸ÅÃâ¾×, ¸ÅÃâ¿ø°¡ ¡æ ¼öÀÍ/ºñ¿ë
+        ' ÆÇ°üºñ, ¿µ¾÷¿Ü¼ÕÀÍ ¡æ ºñ¿ë
+        masterArray(validRows, 7) = Derive´ëºĞ·ù(classification)
 
         ' Column 8: Ranking - Sequential 100-unit increments (110, 120, 130...)
         masterArray(validRows, 8) = (validRows + 1) * 10
 
-        ' Column 9: ë¶€í˜¸ - D for Debit accounts (Assets, Expenses), C for Credit accounts (Liabilities, Equity, Revenue)
+        ' Column 9: ºÎÈ£ - D for Debit accounts (Assets, Expenses), C for Credit accounts (Liabilities, Equity, Revenue)
         ' Based on BSPL field
-        masterArray(validRows, 9) = Deriveë¶€í˜¸(masterArray(validRows, 6), classification)
+        masterArray(validRows, 9) = DeriveºÎÈ£(masterArray(validRows, 6), classification)
 
-        ' Column 10: ê¸ˆì•¡ - Initialize to 0
+        ' Column 10: ±İ¾× - Initialize to 0
         masterArray(validRows, 10) = 0
 
 NextRow:
     Next i
 
     If validRows = 0 Then
-        GoEnd "ìœ íš¨í•œ CoA ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤!"
+        GoEnd "À¯È¿ÇÑ CoA µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù!"
     End If
 
     '==========================================================================
     ' STEP 4: Clear existing Master table and insert new data
     '==========================================================================
-    Call CalculateProgress(0.7, "Master í…Œì´ë¸” ì´ˆê¸°í™” ì¤‘...")
+    Call CalculateProgress(0.7, "Master Å×ÀÌºí ÃÊ±âÈ­ Áß...")
 
     CoAMaster.Unprotect PASSWORD
 
@@ -227,7 +227,7 @@ NextRow:
     ' Resize table to accommodate new data
     tblMaster.Resize tblMaster.Range.Resize(validRows + 1)
 
-    Call CalculateProgress(0.8, "ë°ì´í„° ì‚½ì… ì¤‘...")
+    Call CalculateProgress(0.8, "µ¥ÀÌÅÍ »ğÀÔ Áß...")
 
     ' Bulk insert data using array (performance optimization)
     ReDim Preserve masterArray(1 To validRows, 1 To 10)
@@ -236,7 +236,7 @@ NextRow:
     '==========================================================================
     ' STEP 5: Format table and protect worksheet
     '==========================================================================
-    Call CalculateProgress(0.9, "í…Œì´ë¸” ì„œì‹ ì ìš© ì¤‘...")
+    Call CalculateProgress(0.9, "Å×ÀÌºí ¼­½Ä Àû¿ë Áß...")
 
     With tblMaster.DataBodyRange
         ' Apply borders
@@ -246,14 +246,14 @@ NextRow:
         ' Format Ranking column as number
         .Columns(8).NumberFormat = "0"
 
-        ' Format ê¸ˆì•¡ column as accounting
+        ' Format ±İ¾× column as accounting
         .Columns(10).NumberFormat = "#,##0"
     End With
 
     ' Protect worksheet with user filtering enabled
     CoAMaster.Protect PASSWORD, UserInterfaceOnly:=True, AllowFiltering:=True
 
-    Call CalculateProgress(1, "ì™„ë£Œ!")
+    Call CalculateProgress(1, "¿Ï·á!")
 
     ' Cleanup
     Set tblMaster = Nothing
@@ -263,8 +263,8 @@ NextRow:
     Call SpeedDown
 
     ' Success message
-    Msg "CoA Master í…Œì´ë¸”ì´ ì„±ê³µì ìœ¼ë¡œ ì´ˆê¸°í™”ë˜ì—ˆìŠµë‹ˆë‹¤!" & vbNewLine & vbNewLine & _
-        "ì´ " & validRows & "ê°œì˜ ê³„ì •ì´ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation
+    Msg "CoA Master Å×ÀÌºíÀÌ ¼º°øÀûÀ¸·Î ÃÊ±âÈ­µÇ¾ú½À´Ï´Ù!" & vbNewLine & vbNewLine & _
+        "ÃÑ " & validRows & "°³ÀÇ °èÁ¤ÀÌ µî·ÏµÇ¾ú½À´Ï´Ù.", vbInformation
 
     Exit Sub
 
@@ -273,7 +273,7 @@ ErrorHandler:
     Call CalculateProgress(1) ' Close progress form
 
     Dim errMsg As String
-    errMsg = "CoA Master ì´ˆê¸°í™” ì¤‘ ì˜¤ë¥˜ ë°œìƒ:" & vbNewLine & vbNewLine & _
+    errMsg = "CoA Master ÃÊ±âÈ­ Áß ¿À·ù ¹ß»ı:" & vbNewLine & vbNewLine & _
              "Error " & Err.Number & ": " & Err.Description
 
     ' Re-protect worksheet if error occurred
@@ -296,9 +296,9 @@ Private Function DeriveBSPL(ByVal accountCode As String) As String
     '   accountCode - 6-digit PwC account code
     '
     ' Returns:
-    '   "BS ìì‚°"  - Account starts with 1
-    '   "BS ë¶€ì±„"  - Account starts with 2
-    '   "BS ì§€ë¶„"  - Account starts with 3
+    '   "BS ÀÚ»ê"  - Account starts with 1
+    '   "BS ºÎÃ¤"  - Account starts with 2
+    '   "BS ÁöºĞ"  - Account starts with 3
     '   "IS"       - Account starts with 4, 5, 8, or 9
     '   ""         - Invalid or empty code
     '==========================================================================
@@ -313,11 +313,11 @@ Private Function DeriveBSPL(ByVal accountCode As String) As String
 
     Select Case firstDigit
         Case "1"
-            DeriveBSPL = "BS ìì‚°"
+            DeriveBSPL = "BS ÀÚ»ê"
         Case "2"
-            DeriveBSPL = "BS ë¶€ì±„"
+            DeriveBSPL = "BS ºÎÃ¤"
         Case "3"
-            DeriveBSPL = "BS ì§€ë¶„"
+            DeriveBSPL = "BS ÁöºĞ"
         Case "4", "5", "8", "9"
             DeriveBSPL = "IS"
         Case Else
@@ -325,73 +325,73 @@ Private Function DeriveBSPL(ByVal accountCode As String) As String
     End Select
 End Function
 
-Private Function DeriveëŒ€ë¶„ë¥˜(ByVal classification As String) As String
+Private Function Derive´ëºĞ·ù(ByVal classification As String) As String
     '==========================================================================
-    ' Derives ëŒ€ë¶„ë¥˜ (major classification) from ë¶„ë¥˜ field
+    ' Derives ´ëºĞ·ù (major classification) from ºĞ·ù field
     '
     ' Parameters:
-    '   classification - Korean classification (ë¶„ë¥˜)
+    '   classification - Korean classification (ºĞ·ù)
     '
     ' Returns:
-    '   "ìì‚°" - For ìœ ë™ìì‚°, ë¹„ìœ ë™ìì‚°
-    '   "ë¶€ì±„" - For ìœ ë™ë¶€ì±„, ë¹„ìœ ë™ë¶€ì±„
-    '   "ìë³¸" - For ìë³¸
-    '   "ìˆ˜ìµ" - For ë§¤ì¶œì•¡
-    '   "ë¹„ìš©" - For ë§¤ì¶œì›ê°€, íŒê´€ë¹„, ì˜ì—…ì™¸ì†ìµ
+    '   "ÀÚ»ê" - For À¯µ¿ÀÚ»ê, ºñÀ¯µ¿ÀÚ»ê
+    '   "ºÎÃ¤" - For À¯µ¿ºÎÃ¤, ºñÀ¯µ¿ºÎÃ¤
+    '   "ÀÚº»" - For ÀÚº»
+    '   "¼öÀÍ" - For ¸ÅÃâ¾×
+    '   "ºñ¿ë" - For ¸ÅÃâ¿ø°¡, ÆÇ°üºñ, ¿µ¾÷¿Ü¼ÕÀÍ
     '   ""     - For empty or unrecognized classification
     '==========================================================================
 
     classification = Trim(classification)
 
     If classification = "" Then
-        DeriveëŒ€ë¶„ë¥˜ = ""
+        Derive´ëºĞ·ù = ""
         Exit Function
     End If
 
     ' Asset classifications
-    If InStr(1, classification, "ìœ ë™ìì‚°", vbTextCompare) > 0 Or _
-       InStr(1, classification, "ë¹„ìœ ë™ìì‚°", vbTextCompare) > 0 Then
-        DeriveëŒ€ë¶„ë¥˜ = "ìì‚°"
+    If InStr(1, classification, "À¯µ¿ÀÚ»ê", vbTextCompare) > 0 Or _
+       InStr(1, classification, "ºñÀ¯µ¿ÀÚ»ê", vbTextCompare) > 0 Then
+        Derive´ëºĞ·ù = "ÀÚ»ê"
         Exit Function
     End If
 
     ' Liability classifications
-    If InStr(1, classification, "ìœ ë™ë¶€ì±„", vbTextCompare) > 0 Or _
-       InStr(1, classification, "ë¹„ìœ ë™ë¶€ì±„", vbTextCompare) > 0 Then
-        DeriveëŒ€ë¶„ë¥˜ = "ë¶€ì±„"
+    If InStr(1, classification, "À¯µ¿ºÎÃ¤", vbTextCompare) > 0 Or _
+       InStr(1, classification, "ºñÀ¯µ¿ºÎÃ¤", vbTextCompare) > 0 Then
+        Derive´ëºĞ·ù = "ºÎÃ¤"
         Exit Function
     End If
 
     ' Equity classification
-    If InStr(1, classification, "ìë³¸", vbTextCompare) > 0 Then
-        DeriveëŒ€ë¶„ë¥˜ = "ìë³¸"
+    If InStr(1, classification, "ÀÚº»", vbTextCompare) > 0 Then
+        Derive´ëºĞ·ù = "ÀÚº»"
         Exit Function
     End If
 
     ' Revenue classification
-    If InStr(1, classification, "ë§¤ì¶œì•¡", vbTextCompare) > 0 Then
-        DeriveëŒ€ë¶„ë¥˜ = "ìˆ˜ìµ"
+    If InStr(1, classification, "¸ÅÃâ¾×", vbTextCompare) > 0 Then
+        Derive´ëºĞ·ù = "¼öÀÍ"
         Exit Function
     End If
 
     ' Expense classifications
-    If InStr(1, classification, "ë§¤ì¶œì›ê°€", vbTextCompare) > 0 Or _
-       InStr(1, classification, "íŒê´€ë¹„", vbTextCompare) > 0 Or _
-       InStr(1, classification, "ì˜ì—…ì™¸ì†ìµ", vbTextCompare) > 0 Then
-        DeriveëŒ€ë¶„ë¥˜ = "ë¹„ìš©"
+    If InStr(1, classification, "¸ÅÃâ¿ø°¡", vbTextCompare) > 0 Or _
+       InStr(1, classification, "ÆÇ°üºñ", vbTextCompare) > 0 Or _
+       InStr(1, classification, "¿µ¾÷¿Ü¼ÕÀÍ", vbTextCompare) > 0 Then
+        Derive´ëºĞ·ù = "ºñ¿ë"
         Exit Function
     End If
 
     ' Default for unrecognized classifications
-    DeriveëŒ€ë¶„ë¥˜ = ""
+    Derive´ëºĞ·ù = ""
 End Function
 
-Private Function Deriveë¶€í˜¸(ByVal bspl As String, ByVal classification As String) As String
+Private Function DeriveºÎÈ£(ByVal bspl As String, ByVal classification As String) As String
     '==========================================================================
-    ' Derives ë¶€í˜¸ (account sign) based on BSPL and classification
+    ' Derives ºÎÈ£ (account sign) based on BSPL and classification
     '
     ' Parameters:
-    '   bspl - BSPL classification (BS ìì‚°, BS ë¶€ì±„, BS ì§€ë¶„, IS)
+    '   bspl - BSPL classification (BS ÀÚ»ê, BS ºÎÃ¤, BS ÁöºĞ, IS)
     '   classification - Korean classification for IS accounts
     '
     ' Returns:
@@ -399,34 +399,34 @@ Private Function Deriveë¶€í˜¸(ByVal bspl As String, ByVal classification As Stri
     '   "C" - Credit accounts (Liabilities, Equity, Revenue)
     '
     ' Logic:
-    '   - BS ìì‚° â†’ D (Assets have debit balance)
-    '   - BS ë¶€ì±„ â†’ C (Liabilities have credit balance)
-    '   - BS ì§€ë¶„ â†’ C (Equity has credit balance)
-    '   - IS with ë§¤ì¶œì•¡ â†’ C (Revenue has credit balance)
-    '   - IS with ë§¤ì¶œì›ê°€, íŒê´€ë¹„, ì˜ì—…ì™¸ì†ìµ â†’ D (Expenses have debit balance)
-    '   - IS other â†’ D (Default for expenses)
+    '   - BS ÀÚ»ê ¡æ D (Assets have debit balance)
+    '   - BS ºÎÃ¤ ¡æ C (Liabilities have credit balance)
+    '   - BS ÁöºĞ ¡æ C (Equity has credit balance)
+    '   - IS with ¸ÅÃâ¾× ¡æ C (Revenue has credit balance)
+    '   - IS with ¸ÅÃâ¿ø°¡, ÆÇ°üºñ, ¿µ¾÷¿Ü¼ÕÀÍ ¡æ D (Expenses have debit balance)
+    '   - IS other ¡æ D (Default for expenses)
     '==========================================================================
 
     Select Case bspl
-        Case "BS ìì‚°"
-            Deriveë¶€í˜¸ = "D" ' Assets are debit accounts
+        Case "BS ÀÚ»ê"
+            DeriveºÎÈ£ = "D" ' Assets are debit accounts
 
-        Case "BS ë¶€ì±„"
-            Deriveë¶€í˜¸ = "C" ' Liabilities are credit accounts
+        Case "BS ºÎÃ¤"
+            DeriveºÎÈ£ = "C" ' Liabilities are credit accounts
 
-        Case "BS ì§€ë¶„"
-            Deriveë¶€í˜¸ = "C" ' Equity is credit account
+        Case "BS ÁöºĞ"
+            DeriveºÎÈ£ = "C" ' Equity is credit account
 
         Case "IS"
             ' For Income Statement accounts, determine by classification
-            If InStr(1, classification, "ë§¤ì¶œì•¡", vbTextCompare) > 0 Then
-                Deriveë¶€í˜¸ = "C" ' Revenue is credit
+            If InStr(1, classification, "¸ÅÃâ¾×", vbTextCompare) > 0 Then
+                DeriveºÎÈ£ = "C" ' Revenue is credit
             Else
-                Deriveë¶€í˜¸ = "D" ' Expenses (COGS, SG&A, Non-operating) are debit
+                DeriveºÎÈ£ = "D" ' Expenses (COGS, SG&A, Non-operating) are debit
             End If
 
         Case Else
-            Deriveë¶€í˜¸ = "" ' Unknown or empty BSPL
+            DeriveºÎÈ£ = "" ' Unknown or empty BSPL
     End Select
 End Function
 

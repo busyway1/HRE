@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_Refresh"
 ' ============================================================================
 ' Module: mod_Refresh
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -14,7 +14,7 @@ Sub RefreshAllData()
     Call SpeedUp
     ThisWorkbook.RefreshAll
 
-    MsgBox "ìƒˆë¡œê³ ì¹¨ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation, AppName & " " & AppType
+    MsgBox "»õ·Î°íÄ§ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.", vbInformation, AppName & " " & AppType
 
     Call SpeedDown
 End Sub

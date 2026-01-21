@@ -2,7 +2,7 @@ Attribute VB_Name = "mod_10_Public"
 Option Explicit
 ' ============================================================================
 ' Module: mod_10_Public
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Version: 1.00
 ' Date: 2026-01-21
 '
@@ -14,12 +14,12 @@ Option Explicit
 Public Const PASSWORD As String = "BEP1234"
 Public Const PASSWORD_Workbook As String = "PwCDA7529"
 Public Const AppName As String = "HRE"
-Public Const AppType = "ì—°ê²°ë§ˆìŠ¤í„°"
+Public Const AppType = "¿¬°á¸¶½ºÅÍ"
 Public Const AppVersion As String = "1.00"
 
 ' ==================== GLOBAL VARIABLES ====================
-Public isYellow As Long         ' CoA í™•ì¸ ì‹œ ë…¸ë€ìƒ‰ìœ¼ë¡œ ì¹ í•´ì§„ í–‰ì˜ ê°œìˆ˜
-Public isYellow_ADBS As Long    ' ì·¨ë“, ì²˜ë¶„ CoA í™•ì¸ ì‹œ ë…¸ë€ìƒ‰ìœ¼ë¡œ ì¹ í•´ì§„ í–‰ì˜ ê°œìˆ˜
+Public isYellow As Long         ' CoA È®ÀÎ ½Ã ³ë¶õ»öÀ¸·Î Ä¥ÇØÁø ÇàÀÇ °³¼ö
+Public isYellow_ADBS As Long    ' Ãëµæ, Ã³ºĞ CoA È®ÀÎ ½Ã ³ë¶õ»öÀ¸·Î Ä¥ÇØÁø ÇàÀÇ °³¼ö
 
 ' ==================== WINDOWS API DECLARATIONS ====================
 Type udtRECT
@@ -73,54 +73,54 @@ Sub SpeedDown()
 End Sub
 
 ' ==================== DATE FUNCTIONS ====================
-Public Function RelDate() As Date ' ë°°í¬ë‚ ì§œ
+Public Function RelDate() As Date ' ¹èÆ÷³¯Â¥
     RelDate = DateSerial(2026, 1, 21)
 End Function
 
-Public Function ExpDate() As Date ' ë§Œë£Œë‚ ì§œ
+Public Function ExpDate() As Date ' ¸¸·á³¯Â¥
     ExpDate = DateSerial(2030, 12, 31)
 End Function
 
 Public Function CopyRight() As String
-    CopyRight = "Â© " & Year(Now) & " Samil PwC. All rights reserved."
+    CopyRight = "(c) " & Year(Now) & " Samil PwC. All rights reserved."
 End Function
 
-Public Function GetClosingYear() As Integer ' ê²°ì‚°ì—°ë„
+Public Function GetClosingYear() As Integer ' °á»ê¿¬µµ
     On Error Resume Next
-    GetClosingYear = CInt(HideSheet.ListObjects("ê²°ì‚°ì—°ì›”").DataBodyRange(1, 1).Value)
+    GetClosingYear = CInt(HideSheet.ListObjects("°á»ê¿¬¿ù").DataBodyRange(1, 1).Value)
 End Function
 
-Public Function GetClosingMonth() As Integer ' ê²°ì‚°ì›”
+Public Function GetClosingMonth() As Integer ' °á»ê¿ù
     On Error Resume Next
-    GetClosingMonth = CInt(HideSheet.ListObjects("ê²°ì‚°ì—°ì›”").DataBodyRange(1, 2).Value)
+    GetClosingMonth = CInt(HideSheet.ListObjects("°á»ê¿¬¿ù").DataBodyRange(1, 2).Value)
 End Function
 
 ' ==================== USER INFORMATION ====================
-Public Function GetUserInfo() As String ' ì‚¬ìš©ì ì´ë¦„ ë°˜í™˜í•¨ìˆ˜
+Public Function GetUserInfo() As String ' »ç¿ëÀÚ ÀÌ¸§ ¹İÈ¯ÇÔ¼ö
     On Error Resume Next
     Dim userName As String
     userName = Application.userName
 
-    ' MS Office ì‚¬ìš©ì ì´ë¦„ì´ ì—†ìœ¼ë©´ Windows ì‚¬ìš©ì ì´ë¦„ ì‚¬ìš©
+    ' MS Office »ç¿ëÀÚ ÀÌ¸§ÀÌ ¾øÀ¸¸é Windows »ç¿ëÀÚ ÀÌ¸§ »ç¿ë
     If userName = "" Then
         userName = Environ$("USERNAME")
     End If
     GetUserInfo = userName
 End Function
 
-Public Function GetUserPath() As String  ' íŒŒì¼ìœ„ì¹˜ ë°˜í™˜í•¨ìˆ˜
+Public Function GetUserPath() As String  ' ÆÄÀÏÀ§Ä¡ ¹İÈ¯ÇÔ¼ö
     Dim userPathAndFile As String
     Dim wb As Workbook
     On Error Resume Next
 
     Set wb = ActiveWorkbook
     If wb.path <> "" Then
-        ' ë¡œì»¬ ë˜ëŠ” ë„¤íŠ¸ì›Œí¬ ë“œë¼ì´ë¸Œì—ì„œ ì €ì¥ëœ ê²½ìš°
+        ' ·ÎÄÃ ¶Ç´Â ³×Æ®¿öÅ© µå¶óÀÌºê¿¡¼­ ÀúÀåµÈ °æ¿ì
         userPathAndFile = wb.FullName
     Else
-        ' SharePointì— ì €ì¥ëœ íŒŒì¼ì¸ ê²½ìš°
+        ' SharePoint¿¡ ÀúÀåµÈ ÆÄÀÏÀÎ °æ¿ì
         userPathAndFile = wb.FullName
-        ' URLì—ì„œ "http://" ë˜ëŠ” "https://" ì œê±°
+        ' URL¿¡¼­ "http://" ¶Ç´Â "https://" Á¦°Å
         If Left(userPathAndFile, 7) = "http://" Then
             userPathAndFile = Mid(userPathAndFile, 8)
         ElseIf Left(userPathAndFile, 8) = "https://" Then
@@ -130,7 +130,7 @@ Public Function GetUserPath() As String  ' íŒŒì¼ìœ„ì¹˜ ë°˜í™˜í•¨ìˆ˜
     GetUserPath = userPathAndFile
 End Function
 
-Public Function GetUserMail() As String ' ì´ë©”ì¼ ë°˜í™˜í•¨ìˆ˜
+Public Function GetUserMail() As String ' ÀÌ¸ŞÀÏ ¹İÈ¯ÇÔ¼ö
     On Error Resume Next
     Select Case UserGmail
     Case Is <> vbNullString: GetUserMail = UserGmail
@@ -154,7 +154,7 @@ Public Function UserOutlookMail() As String
 End Function
 
 ' ==================== PERMISSION VALIDATION ====================
-Public Function IsPermittedEmail() As Boolean ' ì´ë©”ì¼ë¡œ ì‚¬ìš©ì ê¶Œí•œì—¬ë¶€ íŒŒì•…
+Public Function IsPermittedEmail() As Boolean ' ÀÌ¸ŞÀÏ·Î »ç¿ëÀÚ ±ÇÇÑ¿©ºÎ ÆÄ¾Ç
    On Error Resume Next
    Dim permittedDomains As Variant
    Dim domain As Variant
@@ -177,10 +177,10 @@ Public Sub ValidatePermission()
     On Error Resume Next
     If Not IsPermittedEmail() Then
         ' Currently disabled - uncomment to enforce email validation
-        ' GoEnd "í—ˆê°€ëœ ì‚¬ìš©ì ê³„ì •ì´ ì•„ë‹™ë‹ˆë‹¤!"
+        ' GoEnd "Çã°¡µÈ »ç¿ëÀÚ °èÁ¤ÀÌ ¾Æ´Õ´Ï´Ù!"
     End If
     If IsExpired() Then
-        GoEnd "ì‚¬ìš© ê¸°ê°„ì´ ë§Œë£Œë˜ì—ˆìŠµë‹ˆë‹¤!"
+        GoEnd "»ç¿ë ±â°£ÀÌ ¸¸·áµÇ¾ú½À´Ï´Ù!"
     End If
 End Sub
 

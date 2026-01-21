@@ -1,7 +1,7 @@
 Attribute VB_Name = "Module1"
 ' ============================================================================
 ' Module: Module1
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -16,35 +16,35 @@ Sub ExportAllVbaComponents()
     Dim exportPath As String
     Dim fileName As String
 
-    ' === 1. Export ê²½ë¡œ ì„¤ì • ===
-    ' í•„ìš”ì‹œ ê²½ë¡œ ë³€ê²½ í•„ìš” (ë§¨ ëì— \ í•„ìˆ˜!)
+    ' === 1. Export °æ·Î ¼³Á¤ ===
+    ' ÇÊ¿ä½Ã °æ·Î º¯°æ ÇÊ¿ä (¸Ç ³¡¿¡ \ ÇÊ¼ö!)
     exportPath = "C:\Users\Public\VBA_Export\"
 
-    ' í´ë” ì—†ìœ¼ë©´ ìƒì„±
+    ' Æú´õ ¾øÀ¸¸é »ı¼º
     If dir(exportPath, vbDirectory) = "" Then
         MkDir exportPath
     End If
 
     Set vbProj = ThisWorkbook.VBProject
 
-    ' === 2. ëª¨ë“  ì»´í¬ë„ŒíŠ¸ ìˆœíšŒ ===
+    ' === 2. ¸ğµç ÄÄÆ÷³ÍÆ® ¼øÈ¸ ===
     For Each vbComp In vbProj.VBComponents
         Select Case vbComp.Type
-            Case vbext_ct_StdModule        ' í‘œì¤€ ëª¨ë“ˆ (.bas)
+            Case vbext_ct_StdModule        ' Ç¥ÁØ ¸ğµâ (.bas)
                 fileName = exportPath & vbComp.name & ".bas"
 
-            Case vbext_ct_ClassModule      ' í´ë˜ìŠ¤ ëª¨ë“ˆ (.cls)
+            Case vbext_ct_ClassModule      ' Å¬·¡½º ¸ğµâ (.cls)
                 fileName = exportPath & vbComp.name & ".cls"
 
             Case vbext_ct_MSForm           ' UserForm (.frm)
                 fileName = exportPath & vbComp.name & ".frm"
 
-            Case vbext_ct_Document         ' ì›Œí¬ì‹œíŠ¸ / ThisWorkbook ì½”ë“œ
-                ' ì›Œí¬ì‹œíŠ¸, ThisWorkbookëŠ” ê·¸ëŒ€ë¡œ export ê°€ëŠ¥ (í™•ì¥ìëŠ” ì„ì˜)
+            Case vbext_ct_Document         ' ¿öÅ©½ÃÆ® / ThisWorkbook ÄÚµå
+                ' ¿öÅ©½ÃÆ®, ThisWorkbook´Â ±×´ë·Î export °¡´É (È®ÀåÀÚ´Â ÀÓÀÇ)
                 fileName = exportPath & vbComp.name & "_code.bas"
 
             Case Else
-                ' ê¸°íƒ€ íƒ€ì…ì€ ê±´ë„ˆëœ€
+                ' ±âÅ¸ Å¸ÀÔÀº °Ç³Ê¶Ü
                 fileName = ""
         End Select
 
@@ -53,5 +53,5 @@ Sub ExportAllVbaComponents()
         End If
     Next vbComp
 
-    MsgBox "VBA ì½”ë“œ Export ì™„ë£Œ! ê²½ë¡œ: " & exportPath, vbInformation
+    MsgBox "VBA ÄÚµå Export ¿Ï·á! °æ·Î: " & exportPath, vbInformation
 End Sub

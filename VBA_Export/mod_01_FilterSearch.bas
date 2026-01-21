@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_01_FilterSearch"
 ' ============================================================================
 ' Module: mod_01_FilterSearch
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -23,24 +23,24 @@ Sub DoFilter()
     Set ws = ActiveSheet
     Set tbl = ws.ListObjects(1)
 
-    ' ì „ì²´ ë°ì´í„° í–‰ ìˆ˜ ê³„ì‚°
+    ' ÀüÃ¼ µ¥ÀÌÅÍ Çà ¼ö °è»ê
     totalRowsCount = tbl.DataBodyRange.Rows.count
 
-    ' ë³´ì´ëŠ” í–‰ ìˆ˜ ê³„ì‚° (í•„í„° ì ìš©)
+    ' º¸ÀÌ´Â Çà ¼ö °è»ê (ÇÊÅÍ Àû¿ë)
     visibleRowsCount = GetVisibleRowsCount(tbl)
 
     If tbl.ShowAutoFilter And visibleRowsCount < totalRowsCount Then
-        userResponse = MsgBox("ì´ë¯¸ í•„í„°ë§ì´ ì ìš©ë˜ì–´ ìˆìŠµë‹ˆë‹¤. í•´ì œ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?" & vbNewLine & vbNewLine & _
-                              "ì˜ˆ - í˜„ì¬ í•„í„°ì— ì¶”ê°€ í•„í„°ë§" & vbNewLine & _
-                              "ì•„ë‹ˆìš” - í•´ì œ í›„ì— ìƒˆë¡œ ëœ í›„ ìƒˆë¡œ í•„í„°ë§" & vbNewLine & _
-                              "ì·¨ì†Œ - ì‘ì—… ì·¨ì†Œ", _
+        userResponse = MsgBox("ÀÌ¹Ì ÇÊÅÍ¸µÀÌ Àû¿ëµÇ¾î ÀÖ½À´Ï´Ù. ÇØÁ¦ ÇÏ½Ã°Ú½À´Ï±î?" & vbNewLine & vbNewLine & _
+                              "¿¹ - ÇöÀç ÇÊÅÍ¿¡ Ãß°¡ ÇÊÅÍ¸µ" & vbNewLine & _
+                              "¾Æ´Ï¿ä - ÇØÁ¦ ÈÄ¿¡ »õ·Î µÈ ÈÄ »õ·Î ÇÊÅÍ¸µ" & vbNewLine & _
+                              "Ãë¼Ò - ÀÛ¾÷ Ãë¼Ò", _
                               vbYesNoCancel + vbQuestion, AppName & " " & AppType)
 
         Select Case userResponse
             Case vbYes
-                ' í˜„ì¬ í•„í„° ìœ ì§€, ì¶”ê°€ í•„í„°ë§ ì§„í–‰
+                ' ÇöÀç ÇÊÅÍ À¯Áö, Ãß°¡ ÇÊÅÍ¸µ ÁøÇà
             Case vbNo
-                ' í•„í„° í•´ì œ ì§„í–‰
+                ' ÇÊÅÍ ÇØÁ¦ ÁøÇà
                 tbl.AutoFilter.ShowAllData
             Case vbCancel
                 GoEnd
@@ -154,7 +154,7 @@ Sub FilterTable()
         End If
     End If
 
-    MsgBox "í•„í„°ë§ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation, AppName & " " & AppType
+    MsgBox "ÇÊÅÍ¸µÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.", vbInformation, AppName & " " & AppType
     Unload frmFilter
     Call SpeedDown
 
@@ -172,21 +172,21 @@ Sub UndoFilter()
     Set ws = ActiveSheet
     Set tbl = ws.ListObjects(1)
 
-    ' ì „ì²´ ë°ì´í„° í–‰ ìˆ˜ ê³„ì‚°
+    ' ÀüÃ¼ µ¥ÀÌÅÍ Çà ¼ö °è»ê
     totalRowsCount = tbl.DataBodyRange.Rows.count
 
     If tbl.ShowAutoFilter Then
-        ' ë³´ì´ëŠ” í–‰ ìˆ˜ ê³„ì‚° (í•„í„° ì ìš©)
+        ' º¸ÀÌ´Â Çà ¼ö °è»ê (ÇÊÅÍ Àû¿ë)
         visibleRowsCount = GetVisibleRowsCount(tbl)
 
         If visibleRowsCount < totalRowsCount Then
             tbl.AutoFilter.ShowAllData
-            MsgBox "í•„í„°ë§ì´ í•´ì œë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation, AppName & " " & AppType
+            MsgBox "ÇÊÅÍ¸µÀÌ ÇØÁ¦µÇ¾ú½À´Ï´Ù.", vbInformation, AppName & " " & AppType
         Else
-            MsgBox "í•„í„°ë§ì´ ì´ë¯¸ í•´ì œë˜ì–´ ìˆìŠµë‹ˆë‹¤.", vbExclamation, AppName & " " & AppType
+            MsgBox "ÇÊÅÍ¸µÀÌ ÀÌ¹Ì ÇØÁ¦µÇ¾î ÀÖ½À´Ï´Ù.", vbExclamation, AppName & " " & AppType
         End If
     Else
-        MsgBox "í˜„ì¬ í•„í„°ê°€ ì ìš©ë˜ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤.", vbExclamation, AppName & " " & AppType
+        MsgBox "ÇöÀç ÇÊÅÍ°¡ Àû¿ëµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.", vbExclamation, AppName & " " & AppType
     End If
 
     Call SpeedDown

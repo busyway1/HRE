@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_z_Module_GetCursor"
 ' ============================================================================
 ' Module: mod_z_Module_GetCursor
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '

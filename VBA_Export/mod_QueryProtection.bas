@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_QueryProtection"
 ' ============================================================================
 ' Module: mod_QueryProtection
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -19,10 +19,10 @@ Public Sub ProtectQueryEditor()
     If isLocked = 0 Then
         isLocked = 2
     ElseIf isLocked = 1 Then
-        Msg "ì¿¼ë¦¬ í¸ì§‘ê¸°ê°€ ì ê²¼ìŠµë‹ˆë‹¤.", vbInformation
+        Msg "Äõ¸® ÆíÁı±â°¡ Àá°å½À´Ï´Ù.", vbInformation
         isLocked = 2
     Else
-        Msg "ì´ë¯¸ ì¿¼ë¦¬ í¸ì§‘ê¸°ê°€ ì ê²¨ìˆìŠµë‹ˆë‹¤.", vbInformation
+        Msg "ÀÌ¹Ì Äõ¸® ÆíÁı±â°¡ Àá°ÜÀÖ½À´Ï´Ù.", vbInformation
     End If
 End Sub
 
@@ -31,17 +31,17 @@ Public Sub UnprotectQueryEditor()
     On Error Resume Next
 
     If isLocked <> 1 Then
-        userPassword = InputBox("ì¿¼ë¦¬ í¸ì§‘ê¸° ë³´í˜¸ë¥¼ í•´ì œí•˜ë ¤ë©´ ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”:", "ì¿¼ë¦¬ í¸ì§‘ê¸° ì ê¸ˆ í•´ì œ")
+        userPassword = InputBox("Äõ¸® ÆíÁı±â º¸È£¸¦ ÇØÁ¦ÇÏ·Á¸é ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä:", "Äõ¸® ÆíÁı±â Àá±İ ÇØÁ¦")
         If userPassword = PASSWORD_Workbook Then
             ThisWorkbook.Unprotect PASSWORD:=PASSWORD_Workbook
             EnableQueryEditorButtons
-            Msg "ì¿¼ë¦¬ í¸ì§‘ê¸° ë³´í˜¸ê°€ í•´ì œë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation
+            Msg "Äõ¸® ÆíÁı±â º¸È£°¡ ÇØÁ¦µÇ¾ú½À´Ï´Ù.", vbInformation
             isLocked = 1
         Else
-            Msg "ì˜ëª»ëœ ë¹„ë°€ë²ˆí˜¸ì…ë‹ˆë‹¤.", vbExclamation
+            Msg "Àß¸øµÈ ºñ¹Ğ¹øÈ£ÀÔ´Ï´Ù.", vbExclamation
         End If
     Else
-        Msg "ì´ë¯¸ ì¿¼ë¦¬ í¸ì§‘ê¸° ë³´í˜¸ê°€ í•´ì œë˜ì–´ìˆìŠµë‹ˆë‹¤", vbInformation
+        Msg "ÀÌ¹Ì Äõ¸® ÆíÁı±â º¸È£°¡ ÇØÁ¦µÇ¾îÀÖ½À´Ï´Ù", vbInformation
     End If
 End Sub
 Private Sub DisableQueryEditorButtons()

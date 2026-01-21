@@ -2,7 +2,7 @@ Attribute VB_Name = "mod_11_Sync"
 Option Explicit
 ' ============================================================================
 ' Module: mod_11_Sync
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -29,43 +29,43 @@ Sub SyncCoA()
     Set dict = CreateObject("Scripting.Dictionary")
     Call SpeedUp
 
-    'íŒŒì¼ ì„ íƒ
+    'ÆÄÀÏ ¼±ÅÃ
     Set fd = Application.FileDialog(msoFileDialogFilePicker)
     With fd
-        .Title = "ì—°ê²°ë§ˆìŠ¤í„°ì—ì„œ íŒŒì¼ ì„ íƒ"
+        .Title = "¿¬°á¸¶½ºÅÍ¿¡¼­ ÆÄÀÏ ¼±ÅÃ"
         .Filters.Clear
         .Filters.Add "Excel Files", "*.xlsm"
         .AllowMultiSelect = False
         If .Show = -1 Then
             strFile = .selectedItems(1)
         Else
-            Msg "íŒŒì¼ ì„ íƒì´ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation
+            Msg "ÆÄÀÏ ¼±ÅÃÀÌ Ãë¼ÒµÇ¾ú½À´Ï´Ù.", vbInformation
             Call SpeedDown
             Exit Sub
         End If
     End With
 
-    'í˜„ì¬ ì—´ë ¤ìˆëŠ” íŒŒì¼ê³¼ ê°™ì€ íŒŒì¼ì¸ì§€ í™•ì¸
+    'ÇöÀç ¿­·ÁÀÖ´Â ÆÄÀÏ°ú °°Àº ÆÄÀÏÀÎÁö È®ÀÎ
     Dim selectedFileName As String
     selectedFileName = Right(strFile, Len(strFile) - InStrRev(strFile, "\"))
 
     For Each wb In Workbooks
         If wb.name = selectedFileName Then
-            Msg "í˜„ì¬ ì—´ë ¤ìˆëŠ” íŒŒì¼ê³¼ ê°™ì€ íŒŒì¼ì…ë‹ˆë‹¤." & vbNewLine & "ë‹¤ë¥¸ íŒŒì¼ì„ ì„ íƒí•´ì£¼ì„¸ìš”.", vbExclamation
+            Msg "ÇöÀç ¿­·ÁÀÖ´Â ÆÄÀÏ°ú °°Àº ÆÄÀÏÀÔ´Ï´Ù." & vbNewLine & "´Ù¸¥ ÆÄÀÏÀ» ¼±ÅÃÇØÁÖ¼¼¿ä.", vbExclamation
             Call SpeedDown
             Exit Sub
         End If
     Next wb
 
-    'íŒŒì¼ ì—´ê¸°
+    'ÆÄÀÏ ¿­±â
     Set wb = Workbooks.Open(strFile)
     If wb Is Nothing Then
-        Msg "íŒŒì¼ì„ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", vbExclamation
+        Msg "ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù.", vbExclamation
         Call SpeedDown
         Exit Sub
     End If
 
-    'í•„ìš”í•œ ì‹œíŠ¸ ì°¾ê¸°
+    'ÇÊ¿äÇÑ ½ÃÆ® Ã£±â
     For Each ws In wb.Worksheets
         Select Case ws.CodeName
             Case "HideSheet"
@@ -79,17 +79,17 @@ Sub SyncCoA()
         End If
     Next ws
 
-    'ì‹œíŠ¸ ì¡´ì¬ ì—¬ë¶€ í™•ì¸
+    '½ÃÆ® Á¸Àç ¿©ºÎ È®ÀÎ
     If wsHide Is Nothing Then
         wb.Close SaveChanges:=False
-        Msg "ì˜¬ë°”ë¥¸ ì—°ê²°ë§ˆìŠ¤í„° íŒŒì¼ì„ ì„ íƒí•´ì£¼ì„¸ìš”!", vbExclamation
+        Msg "¿Ã¹Ù¸¥ ¿¬°á¸¶½ºÅÍ ÆÄÀÏÀ» ¼±ÅÃÇØÁÖ¼¼¿ä!", vbExclamation
         Call SpeedDown
         Exit Sub
     End If
 
     If wsCoA Is Nothing Then
         wb.Close SaveChanges:=False
-        Msg "íŒŒì¼ì—ì„œ ë²•ì¸ë³„ CoA ì‹œíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", vbExclamation
+        Msg "ÆÄÀÏ¿¡¼­ ¹ıÀÎº° CoA ½ÃÆ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.", vbExclamation
         Call SpeedDown
         Exit Sub
     End If
@@ -97,37 +97,37 @@ Sub SyncCoA()
     Set tblSource = wsCoA.ListObjects("Raw_CoA")
     Set tblTarget = CorpCoA.ListObjects("Raw_CoA")
 
-    'í…Œì´ë¸” ì¡´ì¬ ì—¬ë¶€ í™•ì¸
+    'Å×ÀÌºí Á¸Àç ¿©ºÎ È®ÀÎ
     If tblSource Is Nothing Or tblTarget Is Nothing Then
         wb.Close SaveChanges:=False
-        Msg "Raw_CoA í…Œì´ë¸”ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", vbExclamation
+        Msg "Raw_CoA Å×ÀÌºíÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.", vbExclamation
         Call SpeedDown
         Exit Sub
     End If
 
-    'íƒ€ê²Ÿ í…Œì´ë¸”ì˜ í‚¤ë¥¼ Dictionaryì— ì €ì¥
+    'Å¸°Ù Å×ÀÌºíÀÇ Å°¸¦ Dictionary¿¡ ÀúÀå
     Dim keyVal As String
     For Each targetRow In tblTarget.ListRows
         keyVal = CStr(targetRow.Range.Cells(1, 1).Value) & "|" & CStr(targetRow.Range.Cells(1, 2).Value)
         dict(keyVal) = True
     Next targetRow
 
-    'ì†ŒìŠ¤ í…Œì´ë¸”ì—ì„œ í‚¤ í™•ì¸ í›„ ì—†ëŠ” ê²½ìš° ì¶”ê°€
+    '¼Ò½º Å×ÀÌºí¿¡¼­ Å° È®ÀÎ ÈÄ ¾ø´Â °æ¿ì Ãß°¡
     addedCount = 0
     i = 1
-    Call OpenProgress("CoA ë™ê¸°í™” ì¤‘...")
+    Call OpenProgress("CoA µ¿±âÈ­ Áß...")
 
     CorpCoA.Unprotect PASSWORD
 
     For Each sourceRow In tblSource.ListRows
-        Call CalculateProgress(i / tblSource.ListRows.count, "CoA ë™ê¸°í™” ì¤‘...")
+        Call CalculateProgress(i / tblSource.ListRows.count, "CoA µ¿±âÈ­ Áß...")
         keyVal = CStr(sourceRow.Range.Cells(1, 1).Value) & "|" & CStr(sourceRow.Range.Cells(1, 2).Value)
         If Not dict.Exists(keyVal) Then
             With tblTarget.ListRows.Add
                 .Range.Value = sourceRow.Range.Value
-                ' ë¹„ê³ ë€ ê°€ì¥ ë§ˆì§€ë§‰ ì—´ì˜ ê°’ & ë²• ì¶”ê°€
+                ' ºñ°í¶õ °¡Àå ¸¶Áö¸· ¿­ÀÇ °ª & ¹ı Ãß°¡
                 .Range.Cells(1, .Range.Columns.count).Value = _
-                .Range.Cells(1, .Range.Columns.count).Value & "from " & wsHide.Range("U2") & " ì¶”ê°€"
+                .Range.Cells(1, .Range.Columns.count).Value & "from " & wsHide.Range("U2") & " Ãß°¡"
             End With
             dict(keyVal) = True
             addedCount = addedCount + 1
@@ -136,7 +136,7 @@ Sub SyncCoA()
     Next sourceRow
 
     wb.Close SaveChanges:=False
-    Msg addedCount & "ê°œì˜ í•­ëª©ì´ ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation
+    Msg addedCount & "°³ÀÇ Ç×¸ñÀÌ Ãß°¡µÇ¾ú½À´Ï´Ù.", vbInformation
 
     CorpCoA.Protect PASSWORD, UserInterfaceOnly:=True, AllowFiltering:=True
 

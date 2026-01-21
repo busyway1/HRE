@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_16_Export"
 ' ============================================================================
 ' Module: mod_16_Export
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -22,18 +22,18 @@ Sub Export_Master()
     On Error Resume Next
 
     If Evaluate(Check.Range("G4").Value) <> 1 Then
-        Msg "ëª¨ë“  ë‹¨ê³„ë¥¼ ì™„ë£Œí•œ í›„ì— ë‚´ë³´ë‚¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤!", vbExclamation
+        Msg "¸ğµç ´Ü°è¸¦ ¿Ï·áÇÑ ÈÄ¿¡ ³»º¸³¾ ¼ö ÀÖ½À´Ï´Ù!", vbExclamation
         Exit Sub
     End If
 
-    userResponse = MsgBox("ì—°ê²°ë§ˆìŠ¤í„° ì‘ë¶€ì— íŒŒì¼ì„ ë‚´ë³´ë‚´ì‹œê² ìŠµë‹ˆê¹Œ?", vbYesNo + vbQuestion, AppName & " " & AppType)
+    userResponse = MsgBox("¿¬°á¸¶½ºÅÍ ÀÛºÎ¿¡ ÆÄÀÏÀ» ³»º¸³»½Ã°Ú½À´Ï±î?", vbYesNo + vbQuestion, AppName & " " & AppType)
     If userResponse = vbNo Then
         Exit Sub
     End If
 
     With Application.FileDialog(msoFileDialogSaveAs)
-        .Title = "ì €ì¥í•  ìœ„ì¹˜ë¥¼ ì„ íƒí•˜ê³  íŒŒì¼ëª…ì„ ì…ë ¥í•˜ì„¸ìš”."
-        .InitialFileName = "ì—°ê²°ë§ˆìŠ¤í„°" & VBA.Right(GetClosingYear(), 2) & GetClosingMonth() & "_ì‘ë¶€ì—.xlsx"
+        .Title = "ÀúÀåÇÒ À§Ä¡¸¦ ¼±ÅÃÇÏ°í ÆÄÀÏ¸íÀ» ÀÔ·ÂÇÏ¼¼¿ä."
+        .InitialFileName = "¿¬°á¸¶½ºÅÍ" & VBA.Right(GetClosingYear(), 2) & GetClosingMonth() & "_ÀÛºÎ¿¡.xlsx"
         If .Show = -1 Then
             saveFilePath = .selectedItems(1)
         Else
@@ -43,14 +43,14 @@ Sub Export_Master()
 
     Call SpeedUp
     Application.DisplayAlerts = False
-    sheetNames = Array("ê³„ì • ë§ˆìŠ¤í„°", "CoA ë§ˆìŠ¤í„°", "ë²•ì¸ë³„ CoA", "í•©ê³„ BSPL", "ê²€ì¦", "ì·¨ë“, ì²˜ë¶„ BSPL", "ì—°ê²°ê´€ë¦¬ëŒ€ì¥", "ì—°ê²°ê´€ë¦¬ëŒ€ì¥(ì²˜ë¶„)")
+    sheetNames = Array("°èÁ¤ ¸¶½ºÅÍ", "CoA ¸¶½ºÅÍ", "¹ıÀÎº° CoA", "ÇÕ°è BSPL", "°ËÁõ", "Ãëµæ, Ã³ºĞ BSPL", "¿¬°á°ü¸®´ëÀå", "¿¬°á°ü¸®´ëÀå(Ã³ºĞ)")
 
     Set newWB = Workbooks.Add
 
-    Call OpenProgress("ì—°ê²°ë§ˆìŠ¤í„° ë‚´ë³´ë‚´ê¸° ì¤‘...")
+    Call OpenProgress("¿¬°á¸¶½ºÅÍ ³»º¸³»±â Áß...")
 
     For i = LBound(sheetNames) To UBound(sheetNames)
-        Call CalculateProgress((i + 1) / (UBound(sheetNames) + 1), sheetNames(i) & " ë‚´ë³´ë‚´ê¸° ì¤‘...")
+        Call CalculateProgress((i + 1) / (UBound(sheetNames) + 1), sheetNames(i) & " ³»º¸³»±â Áß...")
         ThisWorkbook.Sheets(sheetNames(i)).Copy After:=newWB.Sheets(newWB.Sheets.count)
         If newWB.Sheets(newWB.Sheets.count).ProtectContents Then
             newWB.Sheets(newWB.Sheets.count).Unprotect PASSWORD
@@ -65,7 +65,7 @@ Sub Export_Master()
         End With
     Next i
 
-    Call OpenProgress(0.5, "ë§í¬ ì²˜ë¦¬ ì¤‘...")
+    Call OpenProgress(0.5, "¸µÅ© Ã³¸® Áß...")
 
     With newWB
         For i = .Queries.count To 1 Step -1
@@ -83,7 +83,7 @@ Sub Export_Master()
 
     End With
 
-    Call CalculateProgress(1, "ë‚´ë³´ë‚´ê¸°ì™„ë£Œ")
+    Call CalculateProgress(1, "³»º¸³»±â¿Ï·á")
     newWB.Sheets(2).Select
     newWB.Sheets(1).Delete
     newWB.SaveAs fileName:=saveFilePath, FileFormat:=xlOpenXMLWorkbook
@@ -92,7 +92,7 @@ Sub Export_Master()
     Application.DisplayAlerts = True
     Call SpeedDown
 
-    Msg "ì—°ê²°ë§ˆìŠ¤í„° ì‘ë¶€ì— ë‚´ë³´ë‚´ê¸° ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤!", vbInformation
+    Msg "¿¬°á¸¶½ºÅÍ ÀÛºÎ¿¡ ³»º¸³»±â ¿Ï·áµÇ¾ú½À´Ï´Ù!", vbInformation
 
     Set ws = Nothing: Set newWB = Nothing: Set sheetNames = Nothing: Set cell = Nothing: Set linkArray = Nothing
 End Sub

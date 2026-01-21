@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_OpenPage"
 ' ============================================================================
 ' Module: mod_OpenPage
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -16,7 +16,7 @@ Sub OpenSPO()
     URL = HideSheet.Range("E2").Value
 
     If URL = "" Then
-        Msg "SPO í™ˆí˜ì´ì§€ ê°’ì„ ì„¤ì •í•´ì£¼ì„¸ìš”!", vbExclamation
+        Msg "SPO È¨ÆäÀÌÁö °ªÀ» ¼³Á¤ÇØÁÖ¼¼¿ä!", vbExclamation
     End If
     Shell "cmd /c start " & URL, vbHide
 End Sub

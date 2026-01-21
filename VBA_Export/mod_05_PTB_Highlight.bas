@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_05_PTB_Highlight"
 ' ============================================================================
 ' Module: mod_05_PTB_Highlight
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -9,7 +9,7 @@ Attribute VB_Name = "mod_05_PTB_Highlight"
 ' Changes: COPY AS-IS - Column references remain same
 ' ============================================================================
 Option Explicit
-Sub QueryRefresh() 'ì¿¼ë¦¬ ê°±ì‹  ë° ë²•ì¸ë³„BSPL í”¼ë²—í…Œì´ë¸” ê°±ì‹ 
+Sub QueryRefresh() 'Äõ¸® °»½Å ¹× ¹ıÀÎº°BSPL ÇÇ¹şÅ×ÀÌºí °»½Å
     Dim tblPTB As ListObject
     Dim tblVerify As ListObject
     Dim pt As PivotTable
@@ -18,7 +18,7 @@ Sub QueryRefresh() 'ì¿¼ë¦¬ ê°±ì‹  ë° ë²•ì¸ë³„BSPL í”¼ë²—í…Œì´ë¸” ê°±ì‹ 
 
     If Check.Cells(12, 4).Value <> "Complete" Or Check.Cells(13, 4).Value <> "Complete" Or Check.Cells(14, 4).Value <> "Complete" Or _
        Check.Cells(16, 4).Value <> "Complete" Then
-        GoEnd "ì´ì „ ë‹¨ê³„ë¥¼ ì™„ë£Œí•´ì£¼ì„¸ìš”!"
+        GoEnd "ÀÌÀü ´Ü°è¸¦ ¿Ï·áÇØÁÖ¼¼¿ä!"
     End If
     With Check.Cells(18, 4)
         .Value = "In Progress"
@@ -29,31 +29,31 @@ Sub QueryRefresh() 'ì¿¼ë¦¬ ê°±ì‹  ë° ë²•ì¸ë³„BSPL í”¼ë²—í…Œì´ë¸” ê°±ì‹ 
 
 
     Call SpeedUp
-    Call OpenProgress("SPOì—ì„œ ê°±ì‹  ì¤‘...")
+    Call OpenProgress("SPO¿¡¼­ °»½Å Áß...")
 
     Set tblPTB = BSPL.ListObjects("PTB")
-    Set tblVerify = Verify.ListObjects("ì¬ë¬´ì œí‘œ")
-    Set pt = CorpBSPL.PivotTables("ë²•ì¸ë³„BSPL")
+    Set tblVerify = Verify.ListObjects("Àç¹«Á¦Ç¥")
+    Set pt = CorpBSPL.PivotTables("¹ıÀÎº°BSPL")
 
     BSPL.Unprotect PASSWORD: Verify.Unprotect PASSWORD: CorpBSPL.Unprotect PASSWORD
 
-    Call CalculateProgress(0.5, "SPOë¡œë¶€í„° í•©ì” ìë£Œ ìƒˆë¡œê³ ì¹¨ ì¤‘...")
+    Call CalculateProgress(0.5, "SPO·ÎºÎÅÍ ÇÕÀÜ ÀÚ·á »õ·Î°íÄ§ Áß...")
     tblPTB.QueryTable.Refresh BackgroundQuery:=False
 
 
-    Call CalculateProgress(0.75, "SPOë¡œë¶€í„° BSPL ìë£Œ ìƒˆë¡œê³ ì¹¨ ì¤‘...")
+    Call CalculateProgress(0.75, "SPO·ÎºÎÅÍ BSPL ÀÚ·á »õ·Î°íÄ§ Áß...")
     tblVerify.QueryTable.Refresh BackgroundQuery:=False
     Application.CalculateUntilAsyncQueriesDone
 
     pt.RefreshTable
 
     BSPL.Protect PASSWORD, UserInterfaceOnly:=True, AllowFiltering:=True: Verify.Protect PASSWORD, UserInterfaceOnly:=True: CorpBSPL.Protect PASSWORD, UserInterfaceOnly:=True
-    Call CalculateProgress(1, "ì‘ì—… ì™„ë£Œ")
+    Call CalculateProgress(1, "ÀÛ¾÷ ¿Ï·á")
 
     Call SpeedDown
     Set tblPTB = Nothing: Set tblVerify = Nothing: Set pt = Nothing
 End Sub
-Sub HighlightPTB() ' ì…ë ¥ë˜ì§€ ì•Šì€ í•©ì” BSPL ë…¸ë‘ ê°•ì¡°
+Sub HighlightPTB() ' ÀÔ·ÂµÇÁö ¾ÊÀº ÇÕÀÜ BSPL ³ë¶û °­Á¶
     Dim tblPTB As ListObject
     Dim rng As Range
     Dim lastCol As Long
@@ -69,11 +69,11 @@ Sub HighlightPTB() ' ì…ë ¥ë˜ì§€ ì•Šì€ í•©ì” BSPL ë…¸ë‘ ê°•ì¡°
     lastCol = tblPTB.ListColumns.count
 
     If rng Is Nothing Or rng.Cells.count = 0 Then
-        GoEnd "í•©ì”(PTB) ë°ì´í„°ë¥¼ ìƒˆë¡œê³ ì¹¨ì„ í™•ì¸í•´ì£¼ì„¸ìš”!" & vbNewLine & "ë˜ëŠ” í•´ë‹¹ ë²•ì¸ ì „ì²´ ì²´í¬ ì—†ì´ ì…ë ¥ëœ ë‚´ìš©ì„ í™•ì¸í•˜ì„¸ìš”!"
+        GoEnd "ÇÕÀÜ(PTB) µ¥ÀÌÅÍ¸¦ »õ·Î°íÄ§À» È®ÀÎÇØÁÖ¼¼¿ä!" & vbNewLine & "¶Ç´Â ÇØ´ç ¹ıÀÎ ÀüÃ¼ Ã¼Å© ¾øÀÌ ÀÔ·ÂµÈ ³»¿ëÀ» È®ÀÎÇÏ¼¼¿ä!"
     End If
 
 
-    ' ì‹œíŠ¸ ë³´í˜¸í•´ì œ
+    ' ½ÃÆ® º¸È£ÇØÁ¦
     BSPL.Unprotect PASSWORD
 
     For i = 1 To rng.Rows.count
@@ -89,7 +89,7 @@ Sub HighlightPTB() ' ì…ë ¥ë˜ì§€ ì•Šì€ í•©ì” BSPL ë…¸ë‘ ê°•ì¡°
     Call SpeedDown
     Set tblPTB = Nothing: Set rng = Nothing
 End Sub
-Sub FilterPTB() ' ê°•ì¡°ëœ ë°ì´í„° í•„í„°ë§
+Sub FilterPTB() ' °­Á¶µÈ µ¥ÀÌÅÍ ÇÊÅÍ¸µ
     Dim tblPTB As ListObject
     Dim rng As Range
     Dim i As Long
@@ -105,13 +105,13 @@ Sub FilterPTB() ' ê°•ì¡°ëœ ë°ì´í„° í•„í„°ë§
 
     BSPL.Unprotect PASSWORD: AddCoA.Unprotect PASSWORD: ThisWorkbook.Unprotect PASSWORD:=PASSWORD_Workbook
 
-    ' í…Œì´ë¸”ì— ì‹¤ì œ ë°ì´í„°ê°€ ìˆëŠ”ì§€ í™•ì¸
+    ' Å×ÀÌºí¿¡ ½ÇÁ¦ µ¥ÀÌÅÍ°¡ ÀÖ´ÂÁö È®ÀÎ
     If Not rng Is Nothing Then
         For i = 1 To rng.Rows.count
-            ' ì²« ë²ˆì§¸ ì—´ì— ê°’ì´ ìˆëŠ”ì§€ í™•ì¸
+            ' Ã¹ ¹øÂ° ¿­¿¡ °ªÀÌ ÀÖ´ÂÁö È®ÀÎ
             If Not IsEmpty(rng.Cells(i, 1).Value) Then
                 hasData = True
-                ' ê°’ì´ ìˆê³  ë…¸ë€ìƒ‰ì¼ ë•Œë§Œ ì¹´ìš´íŠ¸
+                ' °ªÀÌ ÀÖ°í ³ë¶õ»öÀÏ ¶§¸¸ Ä«¿îÆ®
                 If rng.Cells(i, 1).Interior.Color = vbYellow Then
                     isYellow = isYellow + 1
                 End If
@@ -119,14 +119,14 @@ Sub FilterPTB() ' ê°•ì¡°ëœ ë°ì´í„° í•„í„°ë§
         Next i
     End If
 
-    ' ë°ì´í„°ê°€ ì—†ëŠ” ê²½ìš° ìë™ìœ¼ë¡œ ì™„ë£Œ ì²˜ë¦¬
+    ' µ¥ÀÌÅÍ°¡ ¾ø´Â °æ¿ì ÀÚµ¿À¸·Î ¿Ï·á Ã³¸®
     If Not hasData Then
         If tblPTB.AutoFilter.FilterMode Then
             tblPTB.AutoFilter.ShowAllData
         End If
         AddCoA.Visible = xlSheetVeryHidden
 
-        ' ì§„í–‰ìƒí™© í‘œì‹œ
+        ' ÁøÇà»óÈ² Ç¥½Ã
         With Check.Cells(18, 4)
             .Value = "Complete"
             .Interior.Color = RGB(198, 239, 206)
@@ -136,7 +136,7 @@ Sub FilterPTB() ' ê°•ì¡°ëœ ë°ì´í„° í•„í„°ë§
 
         BSPL.Activate
         BSPL.Range("B1").Select
-        MsgBox "ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤. ì‘ì—…ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation, AppName & " " & AppType
+        MsgBox "µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù. ÀÛ¾÷ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.", vbInformation, AppName & " " & AppType
     ElseIf isYellow > 0 Then
         tblPTB.Range.AutoFilter Field:=1, Criteria1:=RGB(255, 255, 0), Operator:=xlFilterCellColor
         BSPL.Activate
@@ -148,15 +148,15 @@ Sub FilterPTB() ' ê°•ì¡°ëœ ë°ì´í„° í•„í„°ë§
 
         BSPL.Activate
         BSPL.Range("B1").Select
-        MsgBox "CoAë¥¼ ì—…ë°ì´íŠ¸ í•´ì£¼ì„¸ìš”." & vbNewLine & _
-                "ê³„ì • ì‹œíŠ¸ ë˜ëŠ” CoA ì¶”ê°€ ì‹œíŠ¸ì—ì„œ CoAë¥¼ ì¶”ê°€í•˜ì„¸ìš”.", vbInformation, AppName & " " & AppType
+        MsgBox "CoA¸¦ ¾÷µ¥ÀÌÆ® ÇØÁÖ¼¼¿ä." & vbNewLine & _
+                "°èÁ¤ ½ÃÆ® ¶Ç´Â CoA Ãß°¡ ½ÃÆ®¿¡¼­ CoA¸¦ Ãß°¡ÇÏ¼¼¿ä.", vbInformation, AppName & " " & AppType
     Else
         If tblPTB.AutoFilter.FilterMode Then
             tblPTB.AutoFilter.ShowAllData
         End If
         AddCoA.Visible = xlSheetVeryHidden
 
-        ' ì§„í–‰ìƒí™© í‘œì‹œ
+        ' ÁøÇà»óÈ² Ç¥½Ã
         With Check.Cells(18, 4)
             .Value = "Complete"
             .Interior.Color = RGB(198, 239, 206)
@@ -166,7 +166,7 @@ Sub FilterPTB() ' ê°•ì¡°ëœ ë°ì´í„° í•„í„°ë§
 
         BSPL.Activate
         BSPL.Range("B1").Select
-        MsgBox "ì‘ì—…ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation, AppName & " " & AppType
+        MsgBox "ÀÛ¾÷ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.", vbInformation, AppName & " " & AppType
     End If
 
     BSPL.Protect PASSWORD, UserInterfaceOnly:=True, AllowFiltering:=True: ThisWorkbook.Protect PASSWORD:=PASSWORD_Workbook

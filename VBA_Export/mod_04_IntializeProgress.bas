@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_04_IntializeProgress"
 ' ============================================================================
 ' Module: mod_04_IntializeProgress
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -14,7 +14,7 @@ Sub DeleteProgress()
     On Error Resume Next
     Call SpeedUp
 
-    response = MsgBox("ì§„í–‰í˜„í™©ì„ ì´ˆê¸°í™”í•©ë‹ˆë‹¤. ì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", _
+    response = MsgBox("ÁøÇàÇöÈ²À» ÃÊ±âÈ­ÇÕ´Ï´Ù. ÁøÇàÇÏ½Ã°Ú½À´Ï±î?", _
                      vbYesNo + vbQuestion, AppName & " " & AppType)
 
     Select Case response
@@ -77,7 +77,7 @@ Sub DeleteProgress()
 
             Check.Protect PASSWORD, UserInterfaceOnly:=True
 
-            MsgBox "ì§„í–‰í˜„í™©ì´ ì´ˆê¸°í™”ë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation, AppName & " " & AppType
+            MsgBox "ÁøÇàÇöÈ²ÀÌ ÃÊ±âÈ­µÇ¾ú½À´Ï´Ù.", vbInformation, AppName & " " & AppType
 
         Case vbNo
             GoEnd

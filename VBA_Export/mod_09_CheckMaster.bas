@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_09_CheckMaster"
 ' ============================================================================
 ' Module: mod_09_CheckMaster
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -18,7 +18,7 @@ Sub VerifyMaster()
     If Check.Cells(12, 4).Value <> "Complete" Or Check.Cells(13, 4).Value <> "Complete" Or Check.Cells(14, 4).Value <> "Complete" Or _
        Check.Cells(16, 4).Value <> "Complete" Or Check.Cells(18, 4).Value <> "Complete" Or Check.Cells(20, 4).Value <> "Complete" Or _
        Check.Cells(21, 4).Value <> "Complete" Or Check.Cells(22, 4).Value <> "Complete" Then
-        GoEnd "ì´ì „ ë‹¨ê³„ë¥¼ ì™„ë£Œí•´ì£¼ì„¸ìš”!"
+        GoEnd "ÀÌÀü ´Ü°è¸¦ ¿Ï·áÇØÁÖ¼¼¿ä!"
     End If
     With Check.Cells(23, 4)
         .Value = "In Progress"
@@ -35,7 +35,7 @@ Sub VerifyMaster()
     dataRange.Interior.ColorIndex = xlNone
 
     For i = 1 To dataRange.Rows.count
-        ' ê¸ˆì•¡ì´ 0ì´ ì•„ë‹ˆë©´ì„œ ê³„ì •ì„ ì…ë ¥í•˜ì§€ ì•Šì•˜ëŠ”ì§€ ì²´í¬
+        ' ±İ¾×ÀÌ 0ÀÌ ¾Æ´Ï¸é¼­ °èÁ¤À» ÀÔ·ÂÇÏÁö ¾Ê¾Ò´ÂÁö Ã¼Å©
         If dataRange.Cells(i, 10).Value <> 0 And _
            (IsEmpty(dataRange.Cells(i, 7)) Or _
             IsEmpty(dataRange.Cells(i, 8))) Then
@@ -44,7 +44,7 @@ Sub VerifyMaster()
     Next i
     For i = 1 To dataRange.Rows.count
         If dataRange.Rows(i).Interior.Color = RGB(255, 254, 0) Then
-            GoEnd "ì¼ë¶€ ê³„ì •ì´ ì…ë ¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!"
+            GoEnd "ÀÏºÎ °èÁ¤ÀÌ ÀÔ·ÂµÇÁö ¾Ê¾Ò½À´Ï´Ù!"
         End If
     Next i
 
@@ -57,7 +57,7 @@ Sub VerifyMaster()
     End With
 
 
-    Msg "CoA ë§ˆìŠ¤í„° ì”ì•¡ ê²€ì¦ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤!", vbInformation
+    Msg "CoA ¸¶½ºÅÍ ÀÜ¾× °ËÁõÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù!", vbInformation
 
     Call SpeedDown
     Set tbl = Nothing: Set dataRange = Nothing

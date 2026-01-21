@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_Log"
 ' ============================================================================
 ' Module: mod_Log
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -11,7 +11,7 @@ Attribute VB_Name = "mod_Log"
 ' ============================================================================
 Option Explicit
 
-' 32/64ë¹„íŠ¸ í˜¸í™˜ API ì„ ì–¸
+' 32/64ºñÆ® È£È¯ API ¼±¾ð
 #If VBA7 Then
     Private Declare PtrSafe Function WideCharToMultiByte Lib "kernel32" ( _
         ByVal CodePage As Long, _

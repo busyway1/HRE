@@ -7,7 +7,7 @@ Sub RefreshPivotVerify()
 
     If Check.Cells(12, 4).Value <> "Complete" Or Check.Cells(13, 4).Value <> "Complete" Or Check.Cells(14, 4).Value <> "Complete" Or _
        Check.Cells(16, 4).Value <> "Complete" Or Check.Cells(18, 4).Value <> "Complete" Then
-        GoEnd "ì„ í–‰ ë‹¨ê³„ë¥¼ ì™„ë£Œí•˜ì„¸ìš”!"
+        GoEnd "¼±Çà ´Ü°è¸¦ ¿Ï·áÇÏ¼¼¿ä!"
     End If
     With Check.Cells(20, 4)
         .Value = "In Progress"
@@ -18,13 +18,13 @@ Sub RefreshPivotVerify()
 
 
     Call SpeedUp
-    Call OpenProgress("ê²€ì¦ ê³„ì‚° ì¤‘...")
+    Call OpenProgress("°ËÁõ °è»ê Áß...")
 
     For Each pt In Verify.PivotTables
         pt.RefreshTable
     Next pt
 
-    Call CalculateProgress(1, "ê³„ì‚° ì™„ë£Œ")
+    Call CalculateProgress(1, "°è»ê ¿Ï·á")
     Call SpeedDown
     Set pt = Nothing
 End Sub
@@ -40,12 +40,12 @@ Sub VerifyBS()
     On Error Resume Next
     Call SpeedUp
 
-    Set pvt = Verify.PivotTables("í•©ì‚°ê²€ì¦(BS)")
+    Set pvt = Verify.PivotTables("ÇÕ»ê°ËÁõ(BS)")
     Set linkTable = HideSheet.ListObjects("Link")
     Set dataRange = pvt.TableRange1
 
     If pvt Is Nothing Then
-        GoEnd "í•©ì‚°ê²€ì¦ í”¼ë²— í…Œì´ë¸”ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+        GoEnd "ÇÕ»ê°ËÁõ ÇÇ¹ş Å×ÀÌºíÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù."
     End If
 
     Verify.Unprotect PASSWORD
@@ -53,31 +53,31 @@ Sub VerifyBS()
     verifyCol = dataRange.Columns.count + dataRange.Column
     linkCol = verifyCol + 1
 
-    ' ê²°ê³¼ê°’ ë‹¤ì‹œ ì´ˆê¸°í™”
+    ' °á°ú°ª ´Ù½Ã ÃÊ±âÈ­
     For i = dataRange.row + 2 To 1000
         Verify.Cells(i, verifyCol).Clear
         Verify.Cells(i, linkCol).Clear
     Next i
 
     With Range(Verify.Cells(dataRange.row, verifyCol), Verify.Cells(dataRange.row + 1, verifyCol))
-        .Value = "ê²€ì¦"
+        .Value = "°ËÁõ"
         .Merge
-        .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+        .Font.name = "¸¼Àº °íµñ Semilight"
         .Font.Size = 11
         .Font.Color = vbWhite
         .Interior.Color = RGB(192, 0, 0)
     End With
     With Range(Verify.Cells(dataRange.row, linkCol), Verify.Cells(dataRange.row + 1, linkCol))
-        .Value = "ë§í¬"
+        .Value = "¸µÅ©"
         .Merge
-        .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+        .Font.name = "¸¼Àº °íµñ Semilight"
         .Font.Size = 11
         .Font.Color = vbWhite
         .Interior.Color = RGB(192, 0, 0)
     End With
 
     If linkTable Is Nothing Then
-        GoEnd "Hide ì‹œíŠ¸ì—ì„œ Link í…Œì´ë¸”ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+        GoEnd "Hide ½ÃÆ®¿¡¼­ Link Å×ÀÌºíÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù."
     End If
 
     For i = dataRange.row + 2 To dataRange.row + dataRange.Rows.count - 1
@@ -85,7 +85,7 @@ Sub VerifyBS()
 
         With Verify.Cells(i, verifyCol)
             .formula = formula
-            .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+            .Font.name = "¸¼Àº °íµñ Semilight"
             .Font.Size = 11
             .NumberFormat = "#,###;[Red](#,###);-"
 
@@ -102,7 +102,7 @@ Sub VerifyBS()
         corpCode = Verify.Cells(i, dataRange.Column).Value
 
         Dim foundCell As Range
-        Set foundCell = linkTable.ListColumns("ë²•ì¸ì½”ë“œ").DataBodyRange.Cells.Find(What:=corpCode, LookAt:=xlWhole, MatchCase:=False)
+        Set foundCell = linkTable.ListColumns("¹ıÀÎÄÚµå").DataBodyRange.Cells.Find(What:=corpCode, LookAt:=xlWhole, MatchCase:=False)
         If Not foundCell Is Nothing Then
             Dim linkColumnIndex As Long
             linkColumnIndex = linkTable.ListColumns("Link").Index
@@ -119,7 +119,7 @@ Sub VerifyBS()
         End If
 
         With Verify.Cells(i, linkCol)
-            .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+            .Font.name = "¸¼Àº °íµñ Semilight"
             .Font.Size = 11
             .HorizontalAlignment = -4108
             If .Value = "" Then
@@ -131,7 +131,7 @@ Sub VerifyBS()
     Dim borderRange As Range
     Set borderRange = Verify.Range(Verify.Cells(dataRange.row, verifyCol), Verify.Cells(dataRange.row + dataRange.Rows.count - 1, linkCol))
 
-    ' í…Œë‘ë¦¬ë¥¼ ìŠ¤íƒ€ì¼ ì ìš©
+    ' Å×µÎ¸®¸¦ ½ºÅ¸ÀÏ Àû¿ë
     With borderRange.Borders
         .LineStyle = xlContinuous
         .Color = RGB(0, 0, 0)
@@ -155,18 +155,18 @@ Sub VerifyIS()
     On Error Resume Next
     Call SpeedUp
 
-    Set pvt = Verify.PivotTables("í•©ì‚°ê²€ì¦(IS)")
+    Set pvt = Verify.PivotTables("ÇÕ»ê°ËÁõ(IS)")
     Set dataRange = pvt.TableRange1
     Set linkTable = HideSheet.ListObjects("Link")
     Set corpTable = CorpMaster.ListObjects("Corp")
-    Set dateTable = HideSheet.ListObjects("ê²°ì‚°ì—°ì›”")
+    Set dateTable = HideSheet.ListObjects("°á»ê¿¬¿ù")
 
     If pvt Is Nothing Then
-        GoEnd "í•©ì‚°ê²€ì¦ í”¼ë²— í…Œì´ë¸”ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+        GoEnd "ÇÕ»ê°ËÁõ ÇÇ¹ş Å×ÀÌºíÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù."
     End If
 
     If linkTable Is Nothing Then
-        GoEnd "Hide ì‹œíŠ¸ì—ì„œ Link í…Œì´ë¸”ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+        GoEnd "Hide ½ÃÆ®¿¡¼­ Link Å×ÀÌºíÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù."
     End If
 
     periodCol = dataRange.Columns.count + dataRange.Column
@@ -181,19 +181,19 @@ Sub VerifyIS()
     Next i
 
     With Range(Verify.Cells(dataRange.row, periodCol), Verify.Cells(dataRange.row + 1, periodCol))
-        .Value = "ê¸°ê°„"
+        .Value = "±â°£"
         .Merge
-        .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+        .Font.name = "¸¼Àº °íµñ Semilight"
         .Font.Size = 11
         .Font.Color = vbBlack
         .Interior.Color = RGB(217, 217, 217)
     End With
 
-    ' ê¸°ê°„ ì²˜ë¶„
+    ' ±â°£ Ã³ºĞ
     With Verify.Cells(dataRange.row + 1, periodCol + 7)
-        .Value = "ê¸°ê°„"
+        .Value = "±â°£"
         .Merge
-        .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+        .Font.name = "¸¼Àº °íµñ Semilight"
         .Font.Size = 11
         .Font.Color = vbBlack
         .Interior.Color = RGB(217, 217, 217)
@@ -201,17 +201,17 @@ Sub VerifyIS()
     End With
 
      With Range(Verify.Cells(dataRange.row, verifyCol), Verify.Cells(dataRange.row + 1, verifyCol))
-        .Value = "ê²€ì¦"
+        .Value = "°ËÁõ"
         .Merge
-        .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+        .Font.name = "¸¼Àº °íµñ Semilight"
         .Font.Size = 11
         .Font.Color = vbWhite
         .Interior.Color = RGB(192, 0, 0)
     End With
     With Range(Verify.Cells(dataRange.row, linkCol), Verify.Cells(dataRange.row + 1, linkCol))
-        .Value = "ë§í¬"
+        .Value = "¸µÅ©"
         .Merge
-        .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+        .Font.name = "¸¼Àº °íµñ Semilight"
         .Font.Size = 11
         .Font.Color = vbWhite
         .Interior.Color = RGB(192, 0, 0)
@@ -221,10 +221,10 @@ Sub VerifyIS()
     For i = dataRange.row + 2 To dataRange.row + dataRange.Rows.count - 1
         corpCode = Verify.Cells(i, dataRange.Column).Value
 
-        ' ê¸°ê°„ ê³„ì‚°
+        ' ±â°£ °è»ê
         Dim periodCell As Range
         Dim cell As Range
-        For Each cell In corpTable.ListColumns("ë²•ì¸ì½”ë“œ").DataBodyRange
+        For Each cell In corpTable.ListColumns("¹ıÀÎÄÚµå").DataBodyRange
             If CStr(cell.Value) = corpCode Then
                 Set periodCell = cell
                 Exit For
@@ -240,41 +240,41 @@ Sub VerifyIS()
             dateYearBegin = dateTable.DataBodyRange.Cells(1, 1).Value & "-01-01"
 
             If dateValueDisposal = "-" Then
-                ' ì·¨ë“ì¼ ì²˜ë¶„ì¼(2000ë…„ 1ì›” 1ì¼ë¡œ ì²˜ë¦¬)
+                ' ÃëµæÀÏ Ã³ºĞÀÏ(2000³â 1¿ù 1ÀÏ·Î Ã³¸®)
                 If dateValue = "-" Then
                     dateValue = "2000-01-01"
                 End If
 
                 If CDate(dateValue) < CDate(dateYearBegin) Then
                     Verify.Cells(i, periodCol).Value = dateTable.DataBodyRange.Cells(1, 1).Value & "-01 ~ " & dateTable.DataBodyRange.Cells(1, 1).Value & "-" & Format(dateTable.DataBodyRange.Cells(1, 2).Value, "00")
-                    ' ê¸°ê°„ ì²˜ë¶„
+                    ' ±â°£ Ã³ºĞ
                     Verify.Cells(i, periodCol + 7).Value = Verify.Cells(i, periodCol).Value
                 Else
                     Verify.Cells(i, periodCol).Value = Format(dateValue, "yyyy-mm") & " ~ " & dateTable.DataBodyRange.Cells(1, 1).Value & "-" & Format(dateTable.DataBodyRange.Cells(1, 2).Value, "00")
-                    ' ê¸°ê°„ ì²˜ë¶„
+                    ' ±â°£ Ã³ºĞ
                     Verify.Cells(i, periodCol + 7).Value = Verify.Cells(i, periodCol).Value
                 End If
 
             Else
                 If CDate(dateValueDisposal) <= CDate(dateTable.DataBodyRange.Cells(1, 1).Value & "-" & Format(dateTable.DataBodyRange.Cells(1, 2).Value, "00")) Then
                     Verify.Cells(i, periodCol).Value = Format(dateYearBegin, "yyyy-mm") & " ~ " & Format(dateValueDisposal, "yyyy-mm")
-                    ' ê¸°ê°„ ì²˜ë¶„
+                    ' ±â°£ Ã³ºĞ
                     Verify.Cells(i, periodCol + 7).Value = Verify.Cells(i, periodCol).Value
                 Else
                     Verify.Cells(i, periodCol).Value = Format(dateYearBegin, "yyyy-mm") & " ~ " & dateTable.DataBodyRange.Cells(1, 1).Value & "-" & Format(dateTable.DataBodyRange.Cells(1, 2).Value, "00")
-                    ' ê¸°ê°„ ì²˜ë¶„
+                    ' ±â°£ Ã³ºĞ
                     Verify.Cells(i, periodCol + 7).Value = Verify.Cells(i, periodCol).Value
                 End If
 
             End If
         Else
             Verify.Cells(i, periodCol).Value = ""
-            ' ê¸°ê°„ ì²˜ë¶„
+            ' ±â°£ Ã³ºĞ
             Verify.Cells(i, periodCol + 7).Value = ""
         End If
 
         With Verify.Cells(i, periodCol)
-            .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+            .Font.name = "¸¼Àº °íµñ Semilight"
             .Font.Size = 11
             .HorizontalAlignment = -4108
             If .Value = "" Then
@@ -282,9 +282,9 @@ Sub VerifyIS()
             End If
         End With
 
-        ' ê¸°ê°„ ì²˜ë¶„
+        ' ±â°£ Ã³ºĞ
         With Verify.Cells(i, periodCol + 7)
-            .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+            .Font.name = "¸¼Àº °íµñ Semilight"
             .Font.Size = 11
             .HorizontalAlignment = -4108
             If .Value = "" Then
@@ -293,11 +293,11 @@ Sub VerifyIS()
         End With
 
 
-        ' ê²€ì¦ ê³„ì‚°
-        formula = "=IF((J" & i & "-K" & i & "-XLOOKUP(I" & i & ",[ë²•ì¸ì½”ë“œ],[ë‹¹ê¸°ìˆœì´ìµ],,0)) = 0, ""TRUE"", J" & i & "-K" & i & "-XLOOKUP(I" & i & ",[ë²•ì¸ì½”ë“œ],[ë‹¹ê¸°ìˆœì´ìµ],,0))"
+        ' °ËÁõ °è»ê
+        formula = "=IF((J" & i & "-K" & i & "-XLOOKUP(I" & i & ",[¹ıÀÎÄÚµå],[´ç±â¼øÀÌÀÍ],,0)) = 0, ""TRUE"", J" & i & "-K" & i & "-XLOOKUP(I" & i & ",[¹ıÀÎÄÚµå],[´ç±â¼øÀÌÀÍ],,0))"
         With Verify.Cells(i, verifyCol)
             .formula = formula
-            .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+            .Font.name = "¸¼Àº °íµñ Semilight"
             .Font.Size = 11
             .NumberFormat = "#,###;[Red](#,###);-"
 
@@ -313,7 +313,7 @@ Sub VerifyIS()
 
 
         Dim foundCell As Range
-        Set foundCell = linkTable.ListColumns("ë²•ì¸ì½”ë“œ").DataBodyRange.Cells.Find(What:=corpCode, LookAt:=xlWhole, MatchCase:=False)
+        Set foundCell = linkTable.ListColumns("¹ıÀÎÄÚµå").DataBodyRange.Cells.Find(What:=corpCode, LookAt:=xlWhole, MatchCase:=False)
         If Not foundCell Is Nothing Then
             Dim linkColumnIndex As Long
             linkColumnIndex = linkTable.ListColumns("Link").Index
@@ -330,7 +330,7 @@ Sub VerifyIS()
         End If
 
         With Verify.Cells(i, linkCol)
-            .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+            .Font.name = "¸¼Àº °íµñ Semilight"
             .Font.Size = 11
             .HorizontalAlignment = -4108
             If .Value = "" Then
@@ -349,7 +349,7 @@ Sub VerifyIS()
         .Weight = xlThin
     End With
 
-    ' ì²˜ë¶„ ê¸°ê°„ Border Line ì¶”ê°€
+    ' Ã³ºĞ ±â°£ Border Line Ãß°¡
     With Verify.Range(Verify.Cells(dataRange.row + 1, periodCol + 7), Verify.Cells(dataRange.row + dataRange.Rows.count - 1, periodCol + 7)).Borders
         .LineStyle = xlContinuous
         .Color = RGB(0, 0, 0)
@@ -373,25 +373,25 @@ Sub ValidateCorpCodes()
     Dim isVerified As Boolean
     Dim scopeColumn As Range
     Dim corpName As Variant
-    Dim scopeNum As Long ' ì „ì²´ Scope ë²•ì¸ ê°œìˆ˜
+    Dim scopeNum As Long ' ÀüÃ¼ Scope ¹ıÀÎ °³¼ö
 
     On Error Resume Next
     Call SpeedUp
 
     Set corpTable = CorpMaster.ListObjects("Corp")
     Set linkTable = HideSheet.ListObjects("Link")
-    Set corpCodeColumn = corpTable.ListColumns("ë²•ì¸ì½”ë“œ").DataBodyRange
+    Set corpCodeColumn = corpTable.ListColumns("¹ıÀÎÄÚµå").DataBodyRange
     Set scopeColumn = corpTable.ListColumns("Scope").DataBodyRange
     isVerified = True
 
     If corpCodeColumn Is Nothing Then
-        GoEnd "ë²•ì¸ì½”ë“œ ì—´ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤"
+        GoEnd "¹ıÀÎÄÚµå ¿­À» Ã£À» ¼ö ¾ø½À´Ï´Ù"
     End If
     If linkTable Is Nothing Then
-        GoEnd "Hide ì‹œíŠ¸ì—ì„œ Link í…Œì´ë¸”ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+        GoEnd "Hide ½ÃÆ®¿¡¼­ Link Å×ÀÌºíÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù."
     End If
 
-    ' ê¸°ì¡´ ë°ì´í„° ì´ˆê¸°í™” 1000ì—´ê¹Œì§€
+    ' ±âÁ¸ µ¥ÀÌÅÍ ÃÊ±âÈ­ 1000¿­±îÁö
     lastColumn = 1000
     Verify.Range(Verify.Cells(14, 2), Verify.Cells(18, lastColumn)).UnMerge
     Verify.Range(Verify.Cells(14, 2), Verify.Cells(18, lastColumn)).Clear
@@ -400,7 +400,7 @@ Sub ValidateCorpCodes()
     scopeNum = 0
 
     For i = 1 To corpCodeColumn.Rows.count
-        ' "Scope" ì—´ì´ "O"ì¸ ê²½ìš°ë§Œ ì²˜ë¦¬
+        ' "Scope" ¿­ÀÌ "O"ÀÎ °æ¿ì¸¸ Ã³¸®
         If scopeColumn.Cells(i, 1).Value = "O" Then
             corpCode = corpCodeColumn.Cells(i, 1).Value
             corpName = corpCodeColumn.Cells(i, 2).Value
@@ -412,13 +412,13 @@ Sub ValidateCorpCodes()
 
                 Verify.Cells(14, outputCol).Value = corpCode
                 Verify.Cells(14, outputCol).HorizontalAlignment = -4108
-                Verify.Cells(14, outputCol).Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+                Verify.Cells(14, outputCol).Font.name = "¸¼Àº °íµñ Semilight"
                 Verify.Cells(15, outputCol).Value = corpName
                 Verify.Cells(16, outputCol).Value = IIf(missingBS, "", "OK")
                 Verify.Cells(17, outputCol).Value = IIf(missingIS, "", "OK")
 
                 Dim foundCell As Range
-                Set foundCell = linkTable.ListColumns("ë²•ì¸ì½”ë“œ").DataBodyRange.Cells.Find(What:=corpCode, LookAt:=xlWhole, MatchCase:=False)
+                Set foundCell = linkTable.ListColumns("¹ıÀÎÄÚµå").DataBodyRange.Cells.Find(What:=corpCode, LookAt:=xlWhole, MatchCase:=False)
                 If Not foundCell Is Nothing Then
                     Dim linkColumnIndex As Long
                     linkColumnIndex = linkTable.ListColumns("Link").Index
@@ -436,7 +436,7 @@ Sub ValidateCorpCodes()
 
                 With Range(Verify.Cells(15, outputCol), Verify.Cells(18, outputCol))
                     .HorizontalAlignment = -4108
-                    .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+                    .Font.name = "¸¼Àº °íµñ Semilight"
                     .Font.Size = 11
                 End With
                 outputCol = outputCol + 1
@@ -447,20 +447,20 @@ Sub ValidateCorpCodes()
         End If
     Next i
 
-    ' ë²•ì¸ ê°œìˆ˜ í™•ì¸
-    Verify.Cells(4, 5).Value = "ê°œìˆ˜"
-    Verify.Cells(5, 5).Value = "ì „ì²´ Scope ë²•ì¸ ê°œìˆ˜"
-    Verify.Cells(6, 5).Value = "BS ë²•ì¸ ê°œìˆ˜"
-    Verify.Cells(7, 5).Value = "PL ë²•ì¸ ê°œìˆ˜"
+    ' ¹ıÀÎ °³¼ö È®ÀÎ
+    Verify.Cells(4, 5).Value = "°³¼ö"
+    Verify.Cells(5, 5).Value = "ÀüÃ¼ Scope ¹ıÀÎ °³¼ö"
+    Verify.Cells(6, 5).Value = "BS ¹ıÀÎ °³¼ö"
+    Verify.Cells(7, 5).Value = "PL ¹ıÀÎ °³¼ö"
     Verify.Cells(4, 6).Value = ""
 
     With Verify.Range("E4:F4")
         .Interior.Color = RGB(217, 217, 217)
-        .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+        .Font.name = "¸¼Àº °íµñ Semilight"
         .Font.Size = 11
     End With
     With Verify.Range("E5:F7")
-        .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+        .Font.name = "¸¼Àº °íµñ Semilight"
         .Font.Size = 11
     End With
     With Verify.Range("F5:F7")
@@ -468,20 +468,20 @@ Sub ValidateCorpCodes()
     End With
     Verify.Range("E4:F7").Borders.LineStyle = xlContinuous
 
-    ' ê°œìˆ˜ ê³„ì‚°
+    ' °³¼ö °è»ê
     With Verify.Cells(5, 6)
         .formula = "=COUNTIF(Corp[Scope],""O"")"
     End With
 
     With Verify.Cells(6, 6)
         Dim bsRange As String
-        bsRange = Verify.PivotTables("í•©ì‚°ê²€ì¦(BS)").RowRange.Address
+        bsRange = Verify.PivotTables("ÇÕ»ê°ËÁõ(BS)").RowRange.Address
         .formula = "=COUNTA(" & bsRange & ")-1"
     End With
 
     With Verify.Cells(7, 6)
         Dim isRange As String
-        isRange = Verify.PivotTables("í•©ì‚°ê²€ì¦(IS)").RowRange.Address
+        isRange = Verify.PivotTables("ÇÕ»ê°ËÁõ(IS)").RowRange.Address
         .formula = "=COUNTA(" & isRange & ")-1"
     End With
 
@@ -491,8 +491,8 @@ Sub ValidateCorpCodes()
 
     If isVerified Then
         With Verify.Cells(14, 2)
-            .Value = "ë‹¨ìˆœí•©ì‚° ê²€ì¦ ì™„ë£Œ"
-            .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+            .Value = "´Ü¼øÇÕ»ê °ËÁõ ¿Ï·á"
+            .Font.name = "¸¼Àº °íµñ Semilight"
             .Font.Size = 11
             .Font.Bold = True
             .VerticalAlignment = -4108
@@ -501,10 +501,10 @@ Sub ValidateCorpCodes()
         End With
     Else
         With Verify.Cells(14, 2)
-            .Value = "ë¯¸ì™„ë£Œ"
+            .Value = "¹Ì¿Ï·á"
             .VerticalAlignment = -4108
             .HorizontalAlignment = -4108
-            .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+            .Font.name = "¸¼Àº °íµñ Semilight"
             .Font.Size = 11
         End With
         Range(Verify.Cells(14, 2), Verify.Cells(15, 2)).Merge
@@ -514,7 +514,7 @@ Sub ValidateCorpCodes()
         Verify.Cells(18, 2).Value = "Link"
         With Range(Verify.Cells(15, 2), Verify.Cells(18, 2))
             .Font.Size = 11
-            .Font.name = "ë§‘ì€ ê³ ë”• Semilight"
+            .Font.name = "¸¼Àº °íµñ Semilight"
             .HorizontalAlignment = -4108
         End With
 
@@ -541,10 +541,10 @@ Sub ValidateCorpCodes()
     Verify.Activate: Verify.Range("B1").Select
 
     If isVerified Then
-        MsgBox "ë‹¨ìˆœí•©ì‚° ìë£Œì§‘ê³„ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤." & vbNewLine & "ë²•ì¸ë³„ ë§í¬ë¥¼ í™•ì¸í•˜ì„¸ìš”.", vbInformation, AppName & " " & AppType
+        MsgBox "´Ü¼øÇÕ»ê ÀÚ·áÁı°è°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù." & vbNewLine & "¹ıÀÎº° ¸µÅ©¸¦ È®ÀÎÇÏ¼¼¿ä.", vbInformation, AppName & " " & AppType
     Else
-        MsgBox "ë‹¨ìˆœí•©ì‚° ìë£Œì§‘ê³„ê°€ ë¯¸ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤." & vbNewLine & "ëˆ„ë½ ë²•ì¸ì„ ìì„¸íˆ í™•ì¸í•˜ì„¸ìš”." & vbNewLine & _
-                "ë²•ì¸ë³„ ë§í¬ë¥¼ í™•ì¸í•˜ì„¸ìš”.", vbExclamation, AppName & " " & AppType
+        MsgBox "´Ü¼øÇÕ»ê ÀÚ·áÁı°è°¡ ¹Ì¿Ï·áµÇ¾ú½À´Ï´Ù." & vbNewLine & "´©¶ô ¹ıÀÎÀ» ÀÚ¼¼È÷ È®ÀÎÇÏ¼¼¿ä." & vbNewLine & _
+                "¹ıÀÎº° ¸µÅ©¸¦ È®ÀÎÇÏ¼¼¿ä.", vbExclamation, AppName & " " & AppType
     End If
 
     Call SpeedDown
@@ -586,7 +586,7 @@ Sub ValidateSheetColors()
     Verify.Protect PASSWORD, UserInterfaceOnly:=True: ThisWorkbook.Protect PASSWORD_Workbook
 
     If invalidColorFound Then
-        MsgBox "ì˜¤ë¥˜ê°€ ë°œê²¬ë˜ì—ˆìŠµë‹ˆë‹¤. ìƒ‰ìƒì„ í™•ì¸í•˜ì„¸ìš”.", vbExclamation, AppName & " " & AppType
+        MsgBox "¿À·ù°¡ ¹ß°ßµÇ¾ú½À´Ï´Ù. »ö»óÀ» È®ÀÎÇÏ¼¼¿ä.", vbExclamation, AppName & " " & AppType
     Else
         With Check.Cells(20, 4)
             .Value = "Complete"
@@ -594,7 +594,7 @@ Sub ValidateSheetColors()
             .Offset(0, 1).Value = Format(Now(), "yyyy-mm-dd hh:mm")
             .Offset(0, 2).Value = GetUserInfo()
         End With
-        MsgBox "ê²€ì¦ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation, AppName & " " & AppType
+        MsgBox "°ËÁõÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.", vbInformation, AppName & " " & AppType
     End If
 
     Call SpeedDown

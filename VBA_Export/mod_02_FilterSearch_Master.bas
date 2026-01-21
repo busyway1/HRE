@@ -1,7 +1,7 @@
 Attribute VB_Name = "mod_02_FilterSearch_Master"
 ' ============================================================================
 ' Module: mod_02_FilterSearch_Master
-' Project: HRE ì—°ê²°ë§ˆìŠ¤í„° (Consolidation Master)
+' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
 ' Migrated from: BEP v1.98
 ' Migration Date: 2026-01-21
 '
@@ -25,18 +25,18 @@ Sub DoFilter_Master()
     visibleRowsCount = GetVisibleRowsCount_Master(tbl)
 
     If tbl.ShowAutoFilter And visibleRowsCount < totalRowsCount Then
-        userResponse = MsgBox("ì´ë¯¸ í•„í„°ë§ì´ ì ìš©ë˜ì–´ ìžˆìŠµë‹ˆë‹¤. í•´ì œ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?" & vbNewLine & vbNewLine & _
-                              "ì˜ˆ - í˜„ìž¬ í•„í„°ì— ì¶”ê°€ í•„í„°ë§" & vbNewLine & _
-                              "ì•„ë‹ˆìš” - í•´ì œ í›„ì— ìƒˆë¡œ ëœ í›„ ìƒˆë¡œ í•„í„°ë§" & vbNewLine & _
-                              "ì·¨ì†Œ - ìž‘ì—… ì·¨ì†Œ", _
-                              vbYesNoCancel + vbQuestion, "í•„í„° í™•ì¸")
+        userResponse = MsgBox("ÀÌ¹Ì ÇÊÅÍ¸µÀÌ Àû¿ëµÇ¾î ÀÖ½À´Ï´Ù. ÇØÁ¦ ÇÏ½Ã°Ú½À´Ï±î?" & vbNewLine & vbNewLine & _
+                              "¿¹ - ÇöÀç ÇÊÅÍ¿¡ Ãß°¡ ÇÊÅÍ¸µ" & vbNewLine & _
+                              "¾Æ´Ï¿ä - ÇØÁ¦ ÈÄ¿¡ »õ·Î µÈ ÈÄ »õ·Î ÇÊÅÍ¸µ" & vbNewLine & _
+                              "Ãë¼Ò - ÀÛ¾÷ Ãë¼Ò", _
+                              vbYesNoCancel + vbQuestion, "ÇÊÅÍ È®ÀÎ")
 
         Select Case userResponse
             Case vbYes
-                ' í˜„ìž¬ í•„í„° ìœ ì§€, ì¶”ê°€ í•„í„°ë§ ì§„í–‰
+                ' ÇöÀç ÇÊÅÍ À¯Áö, Ãß°¡ ÇÊÅÍ¸µ ÁøÇà
                 frmFilter_Master.Show
             Case vbNo
-                ' í•„í„° í•´ì œ ì§„í–‰
+                ' ÇÊÅÍ ÇØÁ¦ ÁøÇà
                 tbl.AutoFilter.ShowAllData
                 frmFilter_Master.Show
             Case vbCancel
@@ -70,21 +70,21 @@ Sub UndoFilter_Master()
     Set ws = ActiveSheet
     Set tbl = ws.ListObjects(1)
 
-    ' ì „ì²´ ë°ì´í„° í–‰ ìˆ˜ ê³„ì‚°
+    ' ÀüÃ¼ µ¥ÀÌÅÍ Çà ¼ö °è»ê
     totalRowsCount = tbl.DataBodyRange.Rows.count
 
     If tbl.ShowAutoFilter Then
-        ' ë³´ì´ëŠ” í–‰ ìˆ˜ ê³„ì‚° (í•„í„° ì ìš©)
+        ' º¸ÀÌ´Â Çà ¼ö °è»ê (ÇÊÅÍ Àû¿ë)
         visibleRowsCount = GetVisibleRowsCount_Master(tbl)
 
         If visibleRowsCount < totalRowsCount Then
             tbl.AutoFilter.ShowAllData
-            MsgBox "í•„í„°ë§ì´ í•´ì œë˜ì—ˆìŠµë‹ˆë‹¤.", vbInformation, "ì™„ë£Œ"
+            MsgBox "ÇÊÅÍ¸µÀÌ ÇØÁ¦µÇ¾ú½À´Ï´Ù.", vbInformation, "¿Ï·á"
         Else
-            MsgBox "í•„í„°ë§ì´ ì´ë¯¸ í•´ì œë˜ì–´ ìžˆìŠµë‹ˆë‹¤.", vbExclamation
+            MsgBox "ÇÊÅÍ¸µÀÌ ÀÌ¹Ì ÇØÁ¦µÇ¾î ÀÖ½À´Ï´Ù.", vbExclamation
         End If
     Else
-        MsgBox "í˜„ìž¬ í•„í„°ê°€ ì ìš©ë˜ì–´ ìžˆì§€ ì•ŠìŠµë‹ˆë‹¤.", vbExclamation
+        MsgBox "ÇöÀç ÇÊÅÍ°¡ Àû¿ëµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.", vbExclamation
     End If
 
     Call SpeedDown
