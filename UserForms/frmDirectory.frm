@@ -1,12 +1,12 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frmDirectory 
-   Caption         =   "ÆÄÀÏ(Æú´õ) ¼±ÅÃ"
+   Caption         =   "ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½"
    ClientHeight    =   9900.001
    ClientLeft      =   120
    ClientTop       =   468
    ClientWidth     =   13068
    OleObjectBlob   =   "frmDirectory.frx":0000
-   StartUpPosition =   1  '¼ÒÀ¯ÀÚ °¡¿îµ¥
+   StartUpPosition =   1  'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½îµ¥
 End
 Attribute VB_Name = "frmDirectory"
 Attribute VB_GlobalNameSpace = False
@@ -16,6 +16,14 @@ Attribute VB_Exposed = False
 Option Explicit
 Private isNormalClose As Boolean
 Private rootDirectory As Directory
+
+' Late Bindingìš© ìƒìˆ˜ ì„ ì–¸ (MSComctlLib ì°¸ì¡° ì—†ì´ ì‚¬ìš©)
+Private Const tvwChild As Long = 4
+Private Const tvwFirst As Long = 0
+Private Const tvwLast As Long = 1
+Private Const tvwNext As Long = 2
+Private Const tvwPrevious As Long = 3
+
 Private Sub Select_Cmd_Click()
     Dim tbl As ListObject
     Dim dataRange As Range
@@ -25,7 +33,7 @@ Private Sub Select_Cmd_Click()
     On Error Resume Next
     
     If Me.File_Option = False And Me.Folder_Option = False Then
-        Msg "ÆÄÀÏ(Æú´õ) ¿É¼ÇÀ» Ã¼Å©ÇØÁÖ¼¼¿ä!", vbCritical
+        Msg "ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½) ï¿½É¼ï¿½ï¿½ï¿½ Ã¼Å©ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½!", vbCritical
         Exit Sub
     End If
     
@@ -40,27 +48,27 @@ Private Sub Select_Cmd_Click()
                                   SearchFormat:=False)
     If Not foundRow Is Nothing Then
         If Me.File_Option = True Then
-            If foundRow.Cells(1, tbl.ListColumns("±¸ºĞ").Index - 1).Value = "ÆÄÀÏ" Then
-                ' ÆÄÀÏ È®ÀåÀÚ °Ë»ç
+            If foundRow.Cells(1, tbl.ListColumns("ï¿½ï¿½ï¿½ï¿½").Index - 1).Value = "ï¿½ï¿½ï¿½ï¿½" Then
+                ' ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
                 If Not HasValidFileExtension(Me.Path_Text.Value) Then
-                    userResponse = MsgBox("ÀÔ·ÂÇÑ ÆÄÀÏÀÌ Æú´õÀÌ°Å³ª Áö¿øµÇ´Â È®ÀåÀÚ°¡ ¾Æ´Õ´Ï´Ù. °è¼ÓÇÏ½Ã°Ú½À´Ï±î?", vbYesNo + vbQuestion, AppName & " " & AppType)
+                    userResponse = MsgBox("ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ È®ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Æ´Õ´Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?", vbYesNo + vbQuestion, AppName & " " & AppType)
                     If userResponse = vbNo Then Exit Sub
                 End If
-                foundRow.Cells(1, tbl.ListColumns("°æ·Î").Index - 1).Value = Me.Path_Text.Value
+                foundRow.Cells(1, tbl.ListColumns("ï¿½ï¿½ï¿½").Index - 1).Value = Me.Path_Text.Value
             Else
-                Msg "¼±ÅÃÇÑ Ç×¸ñÀÌ 'ÆÄÀÏ'ÀÌ ¾Æ´Õ´Ï´Ù.", vbExclamation
+                Msg "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ 'ï¿½ï¿½ï¿½ï¿½'ï¿½ï¿½ ï¿½Æ´Õ´Ï´ï¿½.", vbExclamation
                 Exit Sub
             End If
         ElseIf Me.Folder_Option = True Then
-            If foundRow.Cells(1, tbl.ListColumns("±¸ºĞ").Index - 1).Value = "Æú´õ" Then
-                ' Æú´õ °æ·Î °Ë»ç
+            If foundRow.Cells(1, tbl.ListColumns("ï¿½ï¿½ï¿½ï¿½").Index - 1).Value = "ï¿½ï¿½ï¿½ï¿½" Then
+                ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
                 If HasValidFileExtension(Me.Path_Text.Value) Then
-                    userResponse = MsgBox("ÀÔ·ÂÇÑ °æ·Î°¡ ÆÄÀÏÃ³·³ º¸ÀÔ´Ï´Ù. Æú´õ·Î °è¼ÓÇÏ½Ã°Ú½À´Ï±î?", vbYesNo + vbQuestion, AppName & " " & AppType)
+                    userResponse = MsgBox("ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½Ô´Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?", vbYesNo + vbQuestion, AppName & " " & AppType)
                     If userResponse = vbNo Then Exit Sub
                 End If
-                foundRow.Cells(1, tbl.ListColumns("°æ·Î").Index - 1).Value = Me.Path_Text.Value
+                foundRow.Cells(1, tbl.ListColumns("ï¿½ï¿½ï¿½").Index - 1).Value = Me.Path_Text.Value
             Else
-                Msg "¼±ÅÃÇÑ Ç×¸ñÀÌ 'Æú´õ'°¡ ¾Æ´Õ´Ï´Ù.", vbExclamation
+                Msg "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ 'ï¿½ï¿½ï¿½ï¿½'ï¿½ï¿½ ï¿½Æ´Õ´Ï´ï¿½.", vbExclamation
                 Exit Sub
             End If
         End If
@@ -73,11 +81,11 @@ Private Sub Select_Cmd_Click()
             .Offset(0, 2).Value = GetUserInfo()
         End With
         
-        Msg "ÀÔ·Â ÁÖ¼Ò°¡ ±â·ÏµÇ¾ú½À´Ï´Ù.", vbInformation
+        Msg "ï¿½Ô·ï¿½ ï¿½Ö¼Ò°ï¿½ ï¿½ï¿½ÏµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.", vbInformation
         isNormalClose = True
         Unload Me
     Else
-        Msg "¼±ÅÃÇÑ Ç×¸ñÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.", vbExclamation
+        Msg "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.", vbExclamation
     End If
     
     Set tbl = Nothing: Set dataRange = Nothing: Set foundRow = Nothing
@@ -98,7 +106,7 @@ Private Sub UserForm_Initialize()
     On Error Resume Next
     Me.Caption = AppName & " " & AppType
     If Check.Cells(12, 4).Value <> "Complete" Then
-        GoEnd "ÀÌÀü ´Ü°è¸¦ ¿Ï·áÇØÁÖ¼¼¿ä!"
+        GoEnd "ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°è¸¦ ï¿½Ï·ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½!"
     End If
     With Check.Cells(13, 4)
         .Value = "In Progress"
@@ -109,13 +117,13 @@ Private Sub UserForm_Initialize()
     
     Set qt = DirectoryURL.ListObjects(1).QueryTable
     Call SpeedUp
-    Call OpenProgress("SPO¿¡ Á¢±Ù Áß...")
-    Call CalculateProgress(0.5, "SPO·ÎºÎÅÍ µğ·ºÅÍ¸® Á¤º¸ ÃëÇÕ Áß...")
+    Call OpenProgress("SPOï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½...")
+    Call CalculateProgress(0.5, "SPOï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½...")
     qt.Refresh BackgroundQuery:=False
     Application.CalculateUntilAsyncQueriesDone
     InitializeDirectoryStructure
     PopulateTreeView
-    Call CalculateProgress(1, "ÀÛ¾÷ ¿Ï·á")
+    Call CalculateProgress(1, "ï¿½Û¾ï¿½ ï¿½Ï·ï¿½")
     Call SpeedDown
     Set qt = Nothing
 End Sub
@@ -126,7 +134,7 @@ Private Sub InitializeDirectoryStructure()
     Dim currentDir As Directory
     On Error Resume Next
     
-    Set tbl = DirectoryURL.ListObjects("µğ·ºÅÍ¸®")
+    Set tbl = DirectoryURL.ListObjects("ï¿½ï¿½ï¿½Í¸ï¿½")
     Set dataRange = tbl.DataBodyRange
     
     Set rootDirectory = New Directory
@@ -152,11 +160,11 @@ Private Sub PopulateTreeView()
     TreeView.Nodes.Clear
     AddDirectoryToTreeView rootDirectory, Nothing
 End Sub
-Private Sub AddDirectoryToTreeView(dir As Directory, parentNode As MSComctlLib.Node)
-    Dim newNode As MSComctlLib.Node
+Private Sub AddDirectoryToTreeView(dir As Directory, parentNode As Object)
+    Dim newNode As Object
     Dim uniqueKey As String
     Dim nodeExists As Boolean
-    Dim existingNode As MSComctlLib.Node
+    Dim existingNode As Object
     nodeExists = False
     On Error Resume Next
 
@@ -174,7 +182,7 @@ Private Sub AddDirectoryToTreeView(dir As Directory, parentNode As MSComctlLib.N
         uniqueKey = "default_key_" & TreeView.Nodes.count + 1
     End If
 
-    ' TreeView¿¡¼­ µ¿ÀÏÇÑ °æ·ÎÀÇ ³ëµå°¡ ÀÖ´ÂÁö È®ÀÎ
+    ' TreeViewï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½å°¡ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     For Each existingNode In TreeView.Nodes
         If existingNode.key = uniqueKey Then
             nodeExists = True
@@ -182,21 +190,21 @@ Private Sub AddDirectoryToTreeView(dir As Directory, parentNode As MSComctlLib.N
         End If
     Next existingNode
 
-    ' Áßº¹µÈ ³ëµå°¡ ¾ø´Â °æ¿ì¿¡¸¸ Ãß°¡
+    ' ï¿½ßºï¿½ï¿½ï¿½ ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ß°ï¿½
     If Not nodeExists Then
         If parentNode Is Nothing Then
-            ' ·çÆ® ³ëµå Ãß°¡
+            ' ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
             Set newNode = TreeView.Nodes.Add(, , uniqueKey, dir.path)
         Else
-            ' ÇÏÀ§ ³ëµå Ãß°¡
+            ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
             Set newNode = TreeView.Nodes.Add(parentNode, tvwChild, uniqueKey, dir.path)
         End If
     Else
-        ' ÀÌ¹Ì Á¸ÀçÇÏ´Â °æ¿ì ±âÁ¸ ³ëµå¸¦ »ç¿ë
+        ' ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½
         Set newNode = existingNode
     End If
 
-    ' ÇÏÀ§ µğ·ºÅÍ¸® Ãß°¡
+    ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ß°ï¿½
     Dim subDir As Directory
     For Each subDir In dir.SubDirectories
         AddDirectoryToTreeView subDir, newNode
@@ -233,13 +241,17 @@ Public Function FindDirectory(dir As Directory, path As String) As Directory
     Next subDir
     Set FindDirectory = Nothing
 End Function
-Private Sub TreeView_NodeClick(ByVal Node As MSComctlLib.Node)
+' TreeView í´ë¦­ ì´ë²¤íŠ¸ - Late Binding ë°©ì‹
+Private Sub TreeView_Click()
     On Error Resume Next
-    Dim fullPath As String
-    fullPath = GetFullPath(Node)
-    Path_Text.text = fullPath
+    Dim Node As Object
+    Set Node = TreeView.SelectedItem
+    If Not Node Is Nothing Then
+        Path_Text.Text = GetFullPath(Node)
+    End If
 End Sub
-Private Function GetFullPath(ByVal Node As MSComctlLib.Node) As String
+
+Private Function GetFullPath(ByVal Node As Object) As String
     On Error Resume Next
     If Node.Parent Is Nothing Then
         GetFullPath = Node.text
@@ -267,10 +279,10 @@ Private Sub UpdateNameCombo()
     Set dataRange = tbl.DataBodyRange
     itemList = ""
     
-    For Each cell In dataRange.Columns(tbl.ListColumns("±¸ºĞ").Index).Cells
+    For Each cell In dataRange.Columns(tbl.ListColumns("ï¿½ï¿½ï¿½ï¿½").Index).Cells
         relativeRow = cell.row - dataRange.row + 1
-        If (Me.File_Option And cell.Value = "ÆÄÀÏ") Or (Me.Folder_Option And cell.Value = "Æú´õ") Then
-            itemList = itemList & ";" & dataRange.Cells(relativeRow, tbl.ListColumns("ÀÌ¸§").Index).Value
+        If (Me.File_Option And cell.Value = "ï¿½ï¿½ï¿½ï¿½") Or (Me.Folder_Option And cell.Value = "ï¿½ï¿½ï¿½ï¿½") Then
+            itemList = itemList & ";" & dataRange.Cells(relativeRow, tbl.ListColumns("ï¿½Ì¸ï¿½").Index).Value
         End If
     Next cell
     
@@ -303,19 +315,19 @@ Private Sub Name_Combo_Change()
     End If
     
     Set tbl = HideSheet.ListObjects("TempPath")
-    Set dataRange = tbl.ListColumns("ÀÌ¸§").DataBodyRange
+    Set dataRange = tbl.ListColumns("ï¿½Ì¸ï¿½").DataBodyRange
     Set foundCell = dataRange.Find(What:=selectedValue, LookIn:=xlValues, LookAt:=xlWhole)
     
     If Not foundCell Is Nothing Then
         Dim descriptionValue As String
         Dim presentPath As String
         descriptionValue = tbl.ListColumns("Description").DataBodyRange.Cells(foundCell.row - dataRange.row + 1, 1).Value
-        presentPath = tbl.ListColumns("°æ·Î").DataBodyRange.Cells(foundCell.row - dataRange.row + 1, 1).Value
+        presentPath = tbl.ListColumns("ï¿½ï¿½ï¿½").DataBodyRange.Cells(foundCell.row - dataRange.row + 1, 1).Value
         Me.Description_Text.Value = descriptionValue
         Me.PresentPath_Text.Value = presentPath
     Else
-        Me.Description_Text.Value = "ÇØ´ç ÆÄÀÏ(Æú´õ) °ü·Ã ¼³¸íÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù."
-        Me.PresentPath_Text.Value = "ÇØ´ç ÆÄÀÏ(Æú´õ) °ü·Ã °æ·Î°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù."
+        Me.Description_Text.Value = "ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½."
+        Me.PresentPath_Text.Value = "ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½."
     End If
     
     Set tbl = Nothing: Set dataRange = Nothing: Set foundCell = Nothing

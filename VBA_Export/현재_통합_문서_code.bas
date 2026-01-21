@@ -9,40 +9,41 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Option Explicit
 ' ============================================================================
-' Module: ThisWorkbook (ÇöÀç_ÅëÇÕ_¹®¼­)
-' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
+' Module: ThisWorkbook (ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½)
+' Project: HRE ï¿½ï¿½ï¿½á¸¶ï¿½ï¿½ï¿½ï¿½ (Consolidation Master)
 ' Version: 1.00
 ' Date: 2026-01-21
 '
 ' Description: Workbook-level event handlers
 ' Changes from BEP:
 '  - Removed: MC-related sheet protection (MCCoA, AddCoA_MC, etc.)
-'  - Added: Exchange rate sheets protection (È¯À²Á¤º¸)
+'  - Added: Exchange rate sheets protection (È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 '  - Updated: Comments and logging for HRE context
 ' ============================================================================
 
-Private Const PASSWORD_WS As String = "BEP1234" ' ¿öÅ©½ÃÆ® Àá±İ PASSWORD
+Private Const PASSWORD_WS As String = "BEP1234" ' ï¿½ï¿½Å©ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ PASSWORD
 Private Const PASSWORD_WB As String = "PwCDA7529"
 
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
     On Error Resume Next
-    LogData_Access Me.Name, "Á¾·á"
+    LogData_Access Me.Name, "ï¿½ï¿½ï¿½ï¿½"
     Application.CommandBars("Queries and Connections").Enabled = True
 End Sub
 
 Private Sub Workbook_Open()
     On Error Resume Next
-    LogData_Access Me.Name, "½ÇÇà"
+    LogData_Access Me.Name, "ï¿½ï¿½ï¿½ï¿½"
     Worksheets("HideSheet").Range("N2").Value = AppVersion
 '    If Not IsPermittedEmail() Then
-'        Msg "ÀÌ¿ë ±ÇÇÑÀÌ ¾ø½À´Ï´Ù!", vbCritical
+'        Msg "ï¿½Ì¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!", vbCritical
 '        Me.Close SaveChanges:=False
 '    End If
 
-    ' HRE - Core sheets protection (removed MC-related sheets)
+    ' HRE - Core sheets protection
     Worksheets("CoAMaster").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
     Worksheets("CorpCoA").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
     Worksheets("BSPL").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
+    Worksheets("ë²•ì¸ë³„ BSPL").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
     Worksheets("CorpMaster").Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
     Worksheets("Verify").Protect PASSWORD_WS, UserInterfaceOnly:=True
     Worksheets("Check").Protect PASSWORD_WS, UserInterfaceOnly:=True
@@ -54,7 +55,7 @@ Private Sub Workbook_Open()
     On Error Resume Next
     Dim ws As Worksheet
     For Each ws In Me.Worksheets
-        If ws.Name = "È¯À²Á¤º¸(Æò±Õ)" Or ws.Name = "È¯À²Á¤º¸(ÀÏÀÚ)" Then
+        If ws.Name = "È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½)" Or ws.Name = "È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)" Then
             ws.Protect PASSWORD_WS, UserInterfaceOnly:=True, AllowFiltering:=True
         End If
     Next ws
@@ -64,8 +65,8 @@ Private Sub Workbook_Open()
 End Sub
 
 Private Sub Workbook_SheetBeforeDelete(ByVal Sh As Object)
-    If Not CheckPassword("½ÃÆ®¸¦ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?") Then
-        Msg "½ÃÆ® »èÁ¦°¡ Ãë¼ÒµÇ¾ú½À´Ï´Ù.", vbInformation
+    If Not CheckPassword("ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?") Then
+        Msg "ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ÒµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.", vbInformation
         Application.EnableEvents = False
         Application.Undo
         Application.EnableEvents = True
@@ -73,8 +74,8 @@ Private Sub Workbook_SheetBeforeDelete(ByVal Sh As Object)
 End Sub
 
 Private Sub Workbook_NewSheet(ByVal Sh As Object)
-    If Not CheckPassword("»õ ½ÃÆ®¸¦ Ãß°¡ÇÏ½Ã°Ú½À´Ï±î?") Then
-        Msg "»õ ½ÃÆ® Ãß°¡°¡ Ãë¼ÒµÇ¾ú½À´Ï´Ù.", vbInformation
+    If Not CheckPassword("ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?") Then
+        Msg "ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ÒµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.", vbInformation
         Application.EnableEvents = False
         Me.Sheets(Me.Sheets.Count).Delete
         Application.EnableEvents = True
@@ -83,7 +84,7 @@ End Sub
 
 Private Function CheckPassword(PromptMessage As String) As Boolean
     Dim UserInput As String
-    UserInput = InputBox(PromptMessage & vbNewLine & vbNewLine & "ÁøÇàÇÏ·Á¸é ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä:", "ºñ¹Ğ¹øÈ£ È®ÀÎ")
+    UserInput = InputBox(PromptMessage & vbNewLine & vbNewLine & "ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½Ğ¹ï¿½È£ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½:", "ï¿½ï¿½Ğ¹ï¿½È£ È®ï¿½ï¿½")
 
     If UserInput = PASSWORD_WB Then
         CheckPassword = True
