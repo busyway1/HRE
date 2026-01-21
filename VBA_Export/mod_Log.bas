@@ -10,15 +10,30 @@ Attribute VB_Name = "mod_Log"
 ' HRE Note: Forms URLs will need to be replaced with actual HRE forms
 ' ============================================================================
 Option Explicit
-Private Declare PtrSafe Function WideCharToMultiByte Lib "kernel32" ( _
-    ByVal CodePage As Long, _
-    ByVal dwFlags As Long, _
-    ByVal lpWideCharStr As LongPtr, _
-    ByVal cchWideChar As Long, _
-    ByVal lpMultiByteStr As LongPtr, _
-    ByVal cbMultiByte As Long, _
-    ByVal lpDefaultChar As LongPtr, _
-    ByVal lpUsedDefaultChar As LongPtr) As Long
+
+' 32/64비트 호환 API 선언
+#If VBA7 Then
+    Private Declare PtrSafe Function WideCharToMultiByte Lib "kernel32" ( _
+        ByVal CodePage As Long, _
+        ByVal dwFlags As Long, _
+        ByVal lpWideCharStr As LongPtr, _
+        ByVal cchWideChar As Long, _
+        ByVal lpMultiByteStr As LongPtr, _
+        ByVal cbMultiByte As Long, _
+        ByVal lpDefaultChar As LongPtr, _
+        ByVal lpUsedDefaultChar As LongPtr) As Long
+#Else
+    Private Declare Function WideCharToMultiByte Lib "kernel32" ( _
+        ByVal CodePage As Long, _
+        ByVal dwFlags As Long, _
+        ByVal lpWideCharStr As Long, _
+        ByVal cchWideChar As Long, _
+        ByVal lpMultiByteStr As Long, _
+        ByVal cbMultiByte As Long, _
+        ByVal lpDefaultChar As Long, _
+        ByVal lpUsedDefaultChar As Long) As Long
+#End If
+
 Private Const CP_UTF8 As Long = 65001
 Public Sub LogData(Answer1 As String, Answer2 As String)
     Dim formUrl As String
