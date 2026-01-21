@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  HRE (Human Resources & Energy) CustomUI Ribbon Definition
+  Version: 2.0
+  Date: 2026-01-21
+
+  Installation Instructions:
+  1. Save this file as "customUI14.xml" in the customUI folder
+  2. Add to Excel workbook using Custom UI Editor or similar tool
+  3. Ensure all callback procedures exist in mod_Ribbon.bas
+  4. Workbook must be saved as .xlsm (macro-enabled)
+
+  Callback Procedures Required in mod_Ribbon.bas:
+  - SetSPO_OnAction, SetDirectory_OnAction, SetDate_OnAction
+  - AppendCorp_OnAction, SetScope_OnAction
+  - GetER_Flow_OnAction, GetER_Spot_OnAction (NEW)
+  - Update_OnAction, Synchro_CoA_OnAction
+  - Verify_BSPL_OnAction, Verify_AD_OnAction, Verify_Master_OnAction
+  - FilterSheet_OnAction, UnfilterSheet_OnAction
+  - ProtectQuery_OnAction, UnprotectQuery_OnAction
+  - ManagePeople_OnAction, Refresh_Data_OnAction
+  - Export_File_OnAction
+  - IRVersion_OnAction, IRSPO_OnAction, IRManual_OnAction, IRBugReport_OnAction
+-->
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui">
+  <ribbon>
+    <tabs>
+      <tab id="tabHRE" label="HRE 통합결산" insertAfterMso="TabHome">
+
+        <!-- Group 1: Setup (5 buttons) -->
+        <group id="grpSetup" label="설정">
+          <button id="btnSetSPO"
+                  label="SPO 연결"
+                  imageMso="DatabaseAccess"
+                  size="large"
+                  onAction="SetSPO_OnAction"
+                  screentip="SharePoint 연결 설정"
+                  supertip="SharePoint Online 데이터 소스 연결을 구성합니다. 쿼리 새로 고침 전에 필수적으로 설정해야 합니다."/>
+
+          <button id="btnSetDirectory"
+                  label="디렉토리 설정"
+                  imageMso="FolderOpen"
+                  size="normal"
+                  onAction="SetDirectory_OnAction"
+                  screentip="작업 디렉토리 설정"
+                  supertip="파일 내보내기 및 임시 파일 저장을 위한 기본 디렉토리를 설정합니다."/>
+
+          <button id="btnSetDate"
+                  label="결산연월 설정"
+                  imageMso="DateAndTimeInsertGallery"
+                  size="normal"
+                  onAction="SetDate_OnAction"
+                  screentip="결산 기준일 설정"
+                  supertip="재무제표 작성 기준이 되는 결산연월을 설정합니다. (예: 2025년 12월)"/>
+
+          <button id="btnAppendCorp"
+                  label="법인 추가"
+                  imageMso="AddInManager"
+                  size="normal"
+                  onAction="AppendCorp_OnAction"
+                  screentip="새로운 법인 추가"
+                  supertip="통합결산 범위에 신규 법인을 추가하고 CoA 매핑을 초기화합니다."/>
+
+          <button id="btnSetScope"
+                  label="결산범위 설정"
+                  imageMso="FilterBySelection"
+                  size="normal"
+                  onAction="SetScope_OnAction"
+                  screentip="통합결산 범위 설정"
+                  supertip="통합결산에 포함할 법인 및 계정 범위를 설정합니다."/>
+        </group>
+
+        <!-- Group 2: Exchange Rate (2 buttons - NEW) -->
+        <group id="grpExchangeRate" label="환율">
+          <button id="btnGetER_Flow"
+                  label="흐름환율 조회"
+                  imageMso="CalculateFx"
+                  size="large"
+                  onAction="GetER_Flow_OnAction"
+                  screentip="흐름환율 자동 조회"
+                  supertip="손익계산서 항목에 적용할 평균환율(흐름환율)을 외환은행 API에서 조회하여 자동 입력합니다."/>
+
+          <button id="btnGetER_Spot"
+                  label="마감환율 조회"
+                  imageMso="CurrencyFormatCurrency"
+                  size="large"
+                  onAction="GetER_Spot_OnAction"
+                  screentip="마감환율 자동 조회"
+                  supertip="재무상태표 항목에 적용할 기말환율(마감환율)을 외환은행 API에서 조회하여 자동 입력합니다."/>
+        </group>
+
+        <!-- Group 3: CoA (2 buttons) -->
+        <group id="grpCoA" label="계정과목">
+          <button id="btnUpdate"
+                  label="Master 업데이트"
+                  imageMso="TableUpdate"
+                  size="large"
+                  onAction="Update_OnAction"
+                  screentip="CoA Master 업데이트"
+                  supertip="PwC 표준 계정과목 마스터를 최신 버전으로 업데이트합니다."/>
+
+          <button id="btnSynchroCoA"
+                  label="CoA 동기화"
+                  imageMso="Synchronize"
+                  size="large"
+                  onAction="Synchro_CoA_OnAction"
+                  screentip="계정과목 동기화"
+                  supertip="법인별 CoA와 Master 간 매핑 정보를 동기화하고 불일치 항목을 표시합니다."/>
+        </group>
+
+        <!-- Group 4: Verification (3 buttons) -->
+        <group id="grpVerification" label="검증">
+          <button id="btnVerifyBSPL"
+                  label="재무제표 검증"
+                  imageMso="AcceptInvitation"
+                  size="normal"
+                  onAction="Verify_BSPL_OnAction"
+                  screentip="BSPL 검증"
+                  supertip="재무상태표 및 손익계산서의 차대평형, 합계 일치 여부를 검증합니다."/>
+
+          <button id="btnVerifyAD"
+                  label="취득처분 검증"
+                  imageMso="TableCheckNamesOnForm"
+                  size="normal"
+                  onAction="Verify_AD_OnAction"
+                  screentip="AD 검증"
+                  supertip="취득 및 처분 재무상태표의 금액 일치 여부를 검증합니다."/>
+
+          <button id="btnVerifyMaster"
+                  label="Master 검증"
+                  imageMso="DatabaseCheckLinkedTables"
+                  size="normal"
+                  onAction="Verify_Master_OnAction"
+                  screentip="CoA Master 검증"
+                  supertip="계정과목 마스터의 구조적 무결성 및 필수 항목을 검증합니다."/>
+        </group>
+
+        <!-- Group 5: Utility (6 buttons) -->
+        <group id="grpUtility" label="도구">
+          <button id="btnFilterSheet"
+                  label="필터 적용"
+                  imageMso="SortDialogClassic"
+                  size="normal"
+                  onAction="FilterSheet_OnAction"
+                  screentip="활성 시트 필터"
+                  supertip="현재 활성화된 워크시트에 자동 필터를 적용합니다."/>
+
+          <button id="btnUnfilterSheet"
+                  label="필터 해제"
+                  imageMso="FilterClearAllFilters"
+                  size="normal"
+                  onAction="UnfilterSheet_OnAction"
+                  screentip="필터 해제"
+                  supertip="현재 시트의 모든 필터를 해제하고 전체 데이터를 표시합니다."/>
+
+          <button id="btnProtectQuery"
+                  label="쿼리 보호"
+                  imageMso="Lock"
+                  size="normal"
+                  onAction="ProtectQuery_OnAction"
+                  screentip="Power Query 보호"
+                  supertip="Power Query 연결을 보호하여 실수로 삭제되는 것을 방지합니다."/>
+
+          <button id="btnUnprotectQuery"
+                  label="쿼리 보호 해제"
+                  imageMso="Unlock"
+                  size="normal"
+                  onAction="UnprotectQuery_OnAction"
+                  screentip="Power Query 보호 해제"
+                  supertip="Power Query 연결 보호를 해제하여 편집 가능하도록 합니다."/>
+
+          <button id="btnManagePeople"
+                  label="사용자 관리"
+                  imageMso="PeoplePane"
+                  size="normal"
+                  onAction="ManagePeople_OnAction"
+                  screentip="권한 관리"
+                  supertip="파일 사용 권한을 가진 사용자 목록을 관리합니다."/>
+
+          <button id="btnRefreshData"
+                  label="데이터 새로고침"
+                  imageMso="RefreshData"
+                  size="normal"
+                  onAction="Refresh_Data_OnAction"
+                  screentip="전체 데이터 새로고침"
+                  supertip="모든 Power Query 연결 및 피벗 테이블을 새로 고칩니다."/>
+        </group>
+
+        <!-- Group 6: Export (1 button) -->
+        <group id="grpExport" label="내보내기">
+          <button id="btnExport"
+                  label="파일 내보내기"
+                  imageMso="ExportToExcel"
+                  size="large"
+                  onAction="Export_File_OnAction"
+                  screentip="결산 파일 내보내기"
+                  supertip="통합결산 결과를 표준 양식의 Excel 파일로 내보냅니다."/>
+        </group>
+
+        <!-- Group 7: Info (4 buttons) -->
+        <group id="grpInfo" label="정보">
+          <button id="btnIRVersion"
+                  label="버전 정보"
+                  imageMso="Info"
+                  size="normal"
+                  onAction="IRVersion_OnAction"
+                  screentip="버전 정보"
+                  supertip="현재 파일의 버전, 릴리스 일자, 라이선스 정보를 확인합니다."/>
+
+          <button id="btnIRSPO"
+                  label="SPO 정보"
+                  imageMso="WebPagePreview"
+                  size="normal"
+                  onAction="IRSPO_OnAction"
+                  screentip="SharePoint 연결 정보"
+                  supertip="현재 설정된 SharePoint 연결 정보 및 상태를 확인합니다."/>
+
+          <button id="btnIRManual"
+                  label="사용 설명서"
+                  imageMso="Help"
+                  size="normal"
+                  onAction="IRManual_OnAction"
+                  screentip="매뉴얼 열기"
+                  supertip="HRE 통합결산 시스템 사용 설명서를 엽니다."/>
+
+          <button id="btnIRBugReport"
+                  label="버그 제보"
+                  imageMso="MacroError"
+                  size="normal"
+                  onAction="IRBugReport_OnAction"
+                  screentip="버그 리포트"
+                  supertip="버그 또는 개선사항을 개발팀에 제보합니다."/>
+        </group>
+
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>
