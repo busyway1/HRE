@@ -29,9 +29,9 @@ Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean
             
              If ListObjects("Master").HeaderRowRange(colIndex).Value = "TB Account" Or _
                ListObjects("Master").HeaderRowRange(colIndex).Value = "Account Name" Or _
-               ListObjects("Master").HeaderRowRange(colIndex).Value = "±İ¾×" Then
+               ListObjects("Master").HeaderRowRange(colIndex).Value = "ê¸ˆì•¡" Then
             
-                MsgBox "ÇØ´ç ¿­Àº ¼öÁ¤ÇÒ ¼ö ¾ø½À´Ï´Ù!", vbCritical, "¿À·ù"
+                MsgBox "í•´ë‹¹ ì—´ì€ ìˆ˜ì •í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!", vbCritical, "ì˜¤ë¥˜"
                 Exit Sub
             End If
         
@@ -50,15 +50,15 @@ Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean
             If ListObjects("Master").HeaderRowRange(selectcol).Value = "TB Account" Or _
                ListObjects("Master").HeaderRowRange(selectcol).Value = "Account Name" Or _
                ListObjects("Master").HeaderRowRange(selectcol).Value = "BSPL" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "´ëºĞ·ù" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "ÁßºĞ·ù" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "¼ÒºĞ·ù" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "°ø½Ã°èÁ¤" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "±×·ì»ç º¸°í¿ë" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "ºÎÈ£" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "±İ¾×" Then
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ëŒ€ë¶„ë¥˜" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ì¤‘ë¶„ë¥˜" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ì†Œë¶„ë¥˜" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ê³µì‹œê³„ì •" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ê·¸ë£¹ì‚¬ ë³´ê³ ìš©" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ë¶€í˜¸" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ê¸ˆì•¡" Then
 
-                MsgBox "ÇØ´ç ¿­ »çÀÌ¿¡ ¿­À» Ãß°¡ÇÒ ¼ö ¾ø½À´Ï´Ù!", vbCritical, "¿À·ù"
+                MsgBox "í•´ë‹¹ ì—´ ì‚¬ì´ì— ì—´ì„ ì¶”ê°€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!", vbCritical, "ì˜¤ë¥˜"
                 Exit Sub
             End If
             
@@ -78,16 +78,16 @@ Private Sub Worksheet_BeforeRightClick(ByVal Target As Range, Cancel As Boolean)
             If ListObjects("Master").HeaderRowRange(selectcol).Value = "TB Account" Or _
                ListObjects("Master").HeaderRowRange(selectcol).Value = "Account Name" Or _
                ListObjects("Master").HeaderRowRange(selectcol).Value = "BSPL" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "´ëºĞ·ù" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "ÁßºĞ·ù" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "¼ÒºĞ·ù" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "°ø½Ã°èÁ¤" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "±×·ì»ç º¸°í¿ë" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "ºÎÈ£" Or _
-               ListObjects("Master").HeaderRowRange(selectcol).Value = "±İ¾×" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ëŒ€ë¶„ë¥˜" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ì¤‘ë¶„ë¥˜" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ì†Œë¶„ë¥˜" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ê³µì‹œê³„ì •" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ê·¸ë£¹ì‚¬ ë³´ê³ ìš©" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ë¶€í˜¸" Or _
+               ListObjects("Master").HeaderRowRange(selectcol).Value = "ê¸ˆì•¡" Or _
                ListObjects("Master").HeaderRowRange(selectcol).Value = "Util" Then
             
-                MsgBox "ÇØ´ç ¿­Àº »èÁ¦ÇÒ ¼ö ¾ø½À´Ï´Ù!", vbCritical, "¿À·ù"
+                MsgBox "í•´ë‹¹ ì—´ì€ ì‚­ì œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!", vbCritical, "ì˜¤ë¥˜"
                 Exit Sub
             End If
             

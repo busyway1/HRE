@@ -61,7 +61,7 @@ Sub Export_Master()
                     cell.Value = cell.Value
                 End If
             Next cell
-            .Range("A1").Select
+            .Range("B1").Select
         End With
     Next i
 

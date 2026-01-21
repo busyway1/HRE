@@ -323,7 +323,7 @@ Sub Fill_CoA_Table()
     End With
 
     BSPL.Activate
-    BSPL.Range("A1").Select
+    BSPL.Range("B1").Select
 
     Application.CutCopyMode = False
     AddCoA.Cells.Locked = True: AddCoA.Range("E5:G1048576").Locked = False

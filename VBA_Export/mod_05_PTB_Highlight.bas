@@ -135,7 +135,7 @@ Sub FilterPTB() ' 강조된 데이터 필터링
          End With
 
         BSPL.Activate
-        BSPL.Range("A1").Select
+        BSPL.Range("B1").Select
         MsgBox "데이터가 없습니다. 작업이 완료되었습니다.", vbInformation, AppName & " " & AppType
     ElseIf isYellow > 0 Then
         tblPTB.Range.AutoFilter Field:=1, Criteria1:=RGB(255, 255, 0), Operator:=xlFilterCellColor
@@ -144,10 +144,10 @@ Sub FilterPTB() ' 강조된 데이터 필터링
         AddCoA.Visible = xlSheetVisible
         AddCoA.Move After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.count)
         AddCoA.Activate
-        AddCoA.Range("A1").Select
+        AddCoA.Range("B1").Select
 
         BSPL.Activate
-        BSPL.Range("A1").Select
+        BSPL.Range("B1").Select
         MsgBox "CoA를 업데이트 해주세요." & vbNewLine & _
                 "계정 시트 또는 CoA 추가 시트에서 CoA를 추가하세요.", vbInformation, AppName & " " & AppType
     Else
@@ -165,7 +165,7 @@ Sub FilterPTB() ' 강조된 데이터 필터링
          End With
 
         BSPL.Activate
-        BSPL.Range("A1").Select
+        BSPL.Range("B1").Select
         MsgBox "작업이 완료되었습니다.", vbInformation, AppName & " " & AppType
     End If
 
