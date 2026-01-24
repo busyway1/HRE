@@ -2,15 +2,15 @@ Attribute VB_Name = "mod_03_PTB_CoA_Input"
 Option Explicit
 ' ============================================================================
 ' Module: mod_03_PTB_CoA_Input
-' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
+' Project: HRE ï¿½ï¿½ï¿½á¸¶ï¿½ï¿½ï¿½ï¿½ (Consolidation Master)
 ' Version: 1.00
 ' Date: 2026-01-21
 '
 ' Description: Enhanced CoA input with variant detection and 5-digit matching
 ' Key changes from BEP:
-'  - Variant suffix detection (_³»ºÎ°Å·¡, _IC)
+'  - Variant suffix detection (_ï¿½ï¿½ï¿½Î°Å·ï¿½, _IC)
 '  - 5-digit base code matching (HRE uses 5-digit codes vs BEP's exact match)
-'  - Multi-tier Dictionary lookup (variant-specific ¡æ BASE fallback)
+'  - Multi-tier Dictionary lookup (variant-specific ï¿½ï¿½ BASE fallback)
 '  - MC account exclusion retained for consistency
 ' ============================================================================
 
@@ -43,7 +43,9 @@ Sub Fill_Input_Table()
    BSPL.Unprotect PASSWORD: AddCoA.Unprotect PASSWORD
 
    With tblPTB.DataBodyRange
-       Set visibleRange = .Resize(, 5).SpecialCells(xlCellTypeVisible)
+       ' HRE v1.00: 6ì»¬ëŸ¼ìœ¼ë¡œ í™•ëŒ€ (ë²•ì¸ëª… ì»¬ëŸ¼ ì¶”ê°€)
+       ' ë²•ì¸ì½”ë“œ, ë²•ì¸ëª…, ë²•ì¸ë³„CoA, ë²•ì¸ë³„ê³„ì •ê³¼ëª©ëª…, PwC_CoA, PwC_ê³„ì •ëª…
+       Set visibleRange = .Resize(, 6).SpecialCells(xlCellTypeVisible)
    End With
 
    newRows = visibleRange.Cells.count / tblPTB.ListColumns.count
@@ -73,7 +75,7 @@ Sub Fill_Input_Table()
 
         Set variantDict = CreateObject("Scripting.Dictionary")
         Set filteredData = tblRawCoA.DataBodyRange.Rows.SpecialCells(xlCellTypeVisible)
-        Set searchrange = Intersect(filteredData, tblRawCoA.ListColumns(2).Range)  ' Column 2: °èÁ¤ÄÚµå
+        Set searchrange = Intersect(filteredData, tblRawCoA.ListColumns(2).Range)  ' Column 2: ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½
 
         ' Build variant-aware dictionary
         For Each area In searchrange.Areas
@@ -82,7 +84,7 @@ Sub Fill_Input_Table()
                 Dim variantType As String
                 Dim targetAccount As String
 
-                accountCode = cell.Value  ' °èÁ¤ÄÚµå (e.g., "10300", "11401_³»ºÎ°Å·¡")
+                accountCode = cell.Value  ' ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ (e.g., "10300", "11401_ï¿½ï¿½ï¿½Î°Å·ï¿½")
                 baseCode = GetBaseCode(accountCode)  ' Extract first 5 digits
                 variantType = GetVariantType(accountCode)  ' Detect variant suffix
                 targetAccount = cell.Offset(0, 3).Value  ' Column 5: Account (PwC consolidated code)
@@ -111,13 +113,14 @@ Sub Fill_Input_Table()
             Dim suggestedAccount As String
             Dim suggestedDescription As String
 
-            ptbAccount = coaRow.Range(1, 3).Value  ' ¹ıÀÎº° CoA (from PTB)
+            ' HRE v1.00: ì»¬ëŸ¼ ì¸ë±ìŠ¤ +1 (ë²•ì¸ëª… ì»¬ëŸ¼ ì¶”ê°€ë¡œ ì¸í•¨)
+            ptbAccount = coaRow.Range(1, 4).Value  ' ë²•ì¸ë³„ CoA (from PTB, 4ë²ˆì§¸ ì»¬ëŸ¼)
             ptbBase = GetBaseCode(ptbAccount)
             ptbVariant = GetVariantType(ptbAccount)
 
             ' Lookup strategy:
-            ' 1. Try exact variant match (e.g., 11401_³»ºÎ°Å·¡ ¡æ INTERCO_KR variant)
-            ' 2. Fallback to BASE variant (e.g., 11401_³»ºÎ°Å·¡ ¡æ 11401 BASE mapping)
+            ' 1. Try exact variant match (e.g., 11401_ï¿½ï¿½ï¿½Î°Å·ï¿½ ï¿½ï¿½ INTERCO_KR variant)
+            ' 2. Fallback to BASE variant (e.g., 11401_ï¿½ï¿½ï¿½Î°Å·ï¿½ ï¿½ï¿½ 11401 BASE mapping)
             ' 3. If no match, leave empty for manual review
 
             If variantDict.Exists(ptbBase) Then
@@ -141,8 +144,9 @@ Sub Fill_Input_Table()
             End If
 
             ' Populate suggestion columns
-            coaRow.Range(1, 4).Value = suggestedAccount  ' PwC_CoA column
-            coaRow.Range(1, 5).Value = suggestedDescription  ' PwC_°èÁ¤°ú¸ñ¸í column
+            ' HRE v1.00: ì»¬ëŸ¼ ì¸ë±ìŠ¤ +1 (ë²•ì¸ëª… ì»¬ëŸ¼ ì¶”ê°€ë¡œ ì¸í•¨)
+            coaRow.Range(1, 5).Value = suggestedAccount  ' PwC_CoA column (5ë²ˆì§¸)
+            coaRow.Range(1, 6).Value = suggestedDescription  ' PwC_ê³„ì •ëª… column (6ë²ˆì§¸)
         Next coaRow
     End With
 
@@ -192,7 +196,7 @@ Sub Fill_CoA_Table()
     If Not tblAddCoA.DataBodyRange Is Nothing Then
         inputData = tblAddCoA.DataBodyRange.Value
     Else
-        GoEnd "ÀÔ·ÂµÈ µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù."
+        GoEnd "ï¿½Ô·Âµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."
     End If
 
     If Not tblMaster.DataBodyRange Is Nothing Then
@@ -250,7 +254,7 @@ Sub Fill_CoA_Table()
         CorpCoA.Protect PASSWORD, UserInterfaceOnly:=True, AllowFiltering:=True
         BSPL.Protect PASSWORD, UserInterfaceOnly:=True, AllowFiltering:=True
         AddCoA.Activate
-        GoEnd "PwC_CoA¿Í PwC_°èÁ¤°ú¸ñ¸í ¸ÅÄªµÇÁö ¾ÊÀº Ç×¸ñÀÌ ÀÖ½À´Ï´Ù."
+        GoEnd "PwC_CoAï¿½ï¿½ PwC_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Äªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½."
     End If
 
     ' Build Raw_CoA duplicate check dictionary
@@ -269,12 +273,12 @@ Sub Fill_CoA_Table()
     Dim newDataCount As Long
     newDataCount = 0
 
-    Call OpenProgress("CoA Ãß°¡ ÀÛ¾÷ ÁøÇàÁß")
+    Call OpenProgress("CoA ï¿½ß°ï¿½ ï¿½Û¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
 
     ' Process each input row
     Dim key As String
     For i = 1 To UBound(inputData)
-        Call CalculateProgress(i / UBound(inputData), "CoA Ãß°¡ Áß...")
+        Call CalculateProgress(i / UBound(inputData), "CoA ï¿½ß°ï¿½ ï¿½ï¿½...")
 
         ' Update PTB highlighting
         Dim j As Long
@@ -307,11 +311,11 @@ Sub Fill_CoA_Table()
         End With
     End If
 
-    Call CalculateProgress(1, "ÀÛ¾÷ ¿Ï·á")
+    Call CalculateProgress(1, "ï¿½Û¾ï¿½ ï¿½Ï·ï¿½")
 
     ' Log activity
-    LogData CorpCoA.Name, "<CoA ´ë·®Ãß°¡>" & vbNewLine & vbNewLine & _
-            "¹ıÀÎÄÚµå | ¹ıÀÎº° CoA | ¹ıÀÎº° °èÁ¤°ú¸ñ¸í | PwC_CoA | PwC_°èÁ¤¸í | ºñ°í" & vbNewLine & _
+    LogData CorpCoA.Name, "<CoA ï¿½ë·®ï¿½ß°ï¿½>" & vbNewLine & vbNewLine & _
+            "ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ | ï¿½ï¿½ï¿½Îºï¿½ CoA | ï¿½ï¿½ï¿½Îºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ | PwC_CoA | PwC_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ | ï¿½ï¿½ï¿½" & vbNewLine & _
             totalLogString
 
     ' Update Check sheet
@@ -335,8 +339,8 @@ Sub Fill_CoA_Table()
     BSPL.Protect PASSWORD, UserInterfaceOnly:=True, AllowFiltering:=True
 
     Call SpeedDown
-    MsgBox "CoA°¡ ¹ıÀÎº°CoA¿¡ Ãß°¡µÇ¾ú½À´Ï´Ù.", vbInformation, AppName & " " & AppType
-    MsgBox "CoA È®ÀÎ ¹× µ¥ÀÌÅÍ ÇÕ»êÀ» ´Ù½Ã ½ÇÇà" & vbNewLine & "ÇÏ¿© °á°ú¸¦ È®ÀÎÇÏ¼¼¿ä.", vbInformation, AppName & " " & AppType
+    MsgBox "CoAï¿½ï¿½ ï¿½ï¿½ï¿½Îºï¿½CoAï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.", vbInformation, AppName & " " & AppType
+    MsgBox "CoA È®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Õ»ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½" & vbNewLine & "ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.", vbInformation, AppName & " " & AppType
 
     Set dict = Nothing
     Set dictRawCoA = Nothing
@@ -346,8 +350,8 @@ End Sub
 ' ==================== PRIVATE HELPER FUNCTIONS ====================
 
 ' GetBaseCode - Extract first 5 digits from account code (before variant suffix)
-' Example: "11401_³»ºÎ°Å·¡" ¡æ "11401"
-' Example: "10300" ¡æ "10300"
+' Example: "11401_ï¿½ï¿½ï¿½Î°Å·ï¿½" ï¿½ï¿½ "11401"
+' Example: "10300" ï¿½ï¿½ "10300"
 Private Function GetBaseCode(accountCode As String) As String
     Dim baseCode As String
     baseCode = accountCode
@@ -368,7 +372,7 @@ End Function
 ' GetVariantType - Detect variant type from account code suffix
 ' Returns: "BASE", "INTERCO_KR", "INTERCO_IC", or "CONSOLIDATION"
 Private Function GetVariantType(accountCode As String) As String
-    If InStr(accountCode, "_³»ºÎ°Å·¡") > 0 Then
+    If InStr(accountCode, "_ï¿½ï¿½ï¿½Î°Å·ï¿½") > 0 Then
         GetVariantType = "INTERCO_KR"
     ElseIf InStr(accountCode, "_IC") > 0 Then
         GetVariantType = "INTERCO_IC"
