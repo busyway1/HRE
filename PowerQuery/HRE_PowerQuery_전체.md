@@ -78,14 +78,19 @@ let
     // HideSheet의 Path 테이블 참조
     Source = Excel.CurrentWorkbook(){[Name="Path"]}[Content],
 
-    // 첫 번째 행의 Path 값 추출
-    PathValue = Source{0}[Path],
+    // 첫 번째 행 가져오기
+    FirstRow = Source{0},
+
+    // 컬럼명에 상관없이 첫 번째 값 추출 (유연성 확보)
+    PathValue = Record.FieldValues(FirstRow){0},
 
     // URL 정리 (공백 제거)
-    CleanedPath = Text.Trim(PathValue)
+    CleanedPath = Text.Trim(Text.From(PathValue))
 in
     CleanedPath
 ```
+
+> **참고**: `Record.FieldValues(FirstRow){0}` 사용으로 컬럼명이 "Path"가 아니어도 동작합니다.
 
 **출력 예시**: `https://pwckor.sharepoint.com/sites/KR-ASR-HRE_Consolidation`
 
@@ -102,14 +107,19 @@ let
     // HideSheet의 TempPath 테이블 참조
     Source = Excel.CurrentWorkbook(){[Name="TempPath"]}[Content],
 
-    // 첫 번째 행의 경로 값 추출
-    TempPathValue = Source{0}[경로],
+    // 첫 번째 행 가져오기
+    FirstRow = Source{0},
+
+    // 컬럼명에 상관없이 첫 번째 값 추출 (유연성 확보)
+    PathValue = Record.FieldValues(FirstRow){0},
 
     // 경로 정리
-    CleanedPath = Text.Trim(TempPathValue)
+    CleanedPath = Text.Trim(Text.From(PathValue))
 in
     CleanedPath
 ```
+
+> **참고**: `Record.FieldValues(FirstRow){0}` 사용으로 컬럼명이 "경로"가 아니어도 동작합니다.
 
 **출력 예시**: `/Shared Documents/★시연용폴더★/2512`
 
