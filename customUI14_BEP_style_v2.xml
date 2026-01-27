@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui">
+  <ribbon>
+    <tabs>
+      <tab id="tabHRE" label="HRE 연결마스터" insertAfterMso="TabHome">
+
+        <!-- 기타 -->
+        <group id="grpEtc" label="기타">
+          <button id="btnLink"
+                  label="링크"
+                  imageMso="HyperlinkInsert"
+                  size="large"
+                  onAction="IRSPO"/>
+          <button id="btnVersion"
+                  label="버전 확인"
+                  imageMso="Info"
+                  size="normal"
+                  onAction="IRVersion"/>
+          <button id="btnPeople"
+                  label="담당자 현황"
+                  imageMso="ContactsMenu"
+                  size="normal"
+                  onAction="Manage_People"/>
+          <button id="btnSynchro"
+                  label="CoA 동기화"
+                  imageMso="RecurrenceEdit"
+                  size="normal"
+                  onAction="Synchro_CoA"/>
+          <button id="btnExport"
+                  label="송부용 추출"
+                  imageMso="ExportExcel"
+                  size="normal"
+                  onAction="Export_File"/>
+        </group>
+
+        <!-- 1단계: 기본정보 설정 -->
+        <group id="grpStep1" label="1단계: 기본정보 설정">
+          <button id="btnSPO"
+                  label="SPO 홈 설정"
+                  imageMso="WebPagePreview"
+                  size="large"
+                  onAction="SetSPO"/>
+          <button id="btnDirectory"
+                  label="파일(폴더) 설정"
+                  imageMso="FileOpen"
+                  size="large"
+                  onAction="SetDirectory"/>
+        </group>
+
+        <!-- 2단계: 정보 업데이트 -->
+        <group id="grpStep2" label="2단계: 정보 업데이트">
+          <button id="btnDate"
+                  label="결산연월 설정"
+                  imageMso="ShowCalendar"
+                  size="large"
+                  onAction="SetDate"/>
+          <button id="btnAppendCorp"
+                  label="대상법인 추가"
+                  imageMso="RecordsAddFromOutlook"
+                  size="normal"
+                  onAction="AppendCorp"/>
+          <button id="btnScope"
+                  label="Scope 설정"
+                  imageMso="AutoFilter"
+                  size="normal"
+                  onAction="SetScope"/>
+        </group>
+
+        <!-- 환율 -->
+        <group id="grpER" label="환율">
+          <button id="btnERFlow"
+                  label="평균환율 조회"
+                  imageMso="CalculateNow"
+                  size="large"
+                  onAction="GetER_Flow"/>
+          <button id="btnERSpot"
+                  label="기말환율 조회"
+                  imageMso="CalculateSheet"
+                  size="large"
+                  onAction="GetER_Spot"/>
+        </group>
+
+        <!-- 3단계: 확인 및 합산 -->
+        <group id="grpStep3" label="3단계: 확인 및 합산">
+          <button id="btnUpdate"
+                  label="CoA 확인 및&#xA;데이터 합산"
+                  imageMso="Refresh"
+                  size="large"
+                  onAction="Update"/>
+        </group>
+
+        <!-- 4단계: 검증 -->
+        <group id="grpStep4" label="4단계: 검증">
+          <button id="btnVerifyBSPL"
+                  label="합산 검증"
+                  imageMso="AcceptTask"
+                  size="large"
+                  onAction="Verify_BSPL"/>
+        </group>
+
+        <!-- 5단계: 취득, 처분 BSPL -->
+        <group id="grpStep5" label="5단계: 취득, 처분 BSPL">
+          <button id="btnUpdateAD"
+                  label="CoA 확인 및&#xA;데이터 합산"
+                  imageMso="Refresh"
+                  size="large"
+                  onAction="Update_AD"/>
+          <button id="btnVerifyAD"
+                  label="합산 검증"
+                  imageMso="AcceptTask"
+                  size="normal"
+                  onAction="Verify_AD"/>
+        </group>
+
+        <!-- 6단계: CoA 마스터 -->
+        <group id="grpStep6" label="6단계: CoA 마스터">
+          <button id="btnVerifyMaster"
+                  label="맵핑 검증"
+                  imageMso="QueryShowTable"
+                  size="large"
+                  onAction="Verify_Master"/>
+        </group>
+
+        <!-- 검색 -->
+        <group id="grpSearch" label="검색">
+          <button id="btnFilter"
+                  label="필터링"
+                  imageMso="FilterMenu"
+                  size="large"
+                  onAction="FilterSheet"/>
+          <button id="btnUnfilter"
+                  label="필터링 해제"
+                  imageMso="FilterClear"
+                  size="large"
+                  onAction="UnfilterSheet"/>
+        </group>
+
+        <!-- 쿼리 보호 -->
+        <group id="grpQueryProtect" label="쿼리 보호">
+          <button id="btnProtect"
+                  label="쿼리 잠금"
+                  imageMso="ProtectDocument"
+                  size="normal"
+                  onAction="ProtectQuery"/>
+          <button id="btnUnprotect"
+                  label="쿼리 잠금 해제"
+                  imageMso="ReviewUnprotectDocument"
+                  size="normal"
+                  onAction="UnprotectQuery"/>
+        </group>
+
+        <!-- 정보 -->
+        <group id="grpInfo" label="정보">
+          <button id="btnManual"
+                  label="사용 설명서"
+                  imageMso="Help"
+                  size="normal"
+                  onAction="IRManual"/>
+          <button id="btnBug"
+                  label="버그 리포트"
+                  imageMso="ComAddInsDialog"
+                  size="normal"
+                  onAction="IRBugReport"/>
+        </group>
+
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>

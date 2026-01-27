@@ -2,7 +2,7 @@ Attribute VB_Name = "mod_Ribbon"
 Option Explicit
 ' ============================================================================
 ' Module: mod_Ribbon
-' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
+' Project: HRE ï¿½ï¿½ï¿½á¸¶ï¿½ï¿½ï¿½ï¿½ (Consolidation Master)
 ' Version: 1.00
 ' Date: 2026-01-21
 '
@@ -15,51 +15,43 @@ Option Explicit
 
 ' ==================== SETUP GROUP ====================
 
-Sub SetSPO(control As IRibbonControl) ' SPO È¨ÆäÀÌÁö ¼³Á¤
+Sub SetSPO(control As IRibbonControl) ' SPO È¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     'ValidatePermission
     frmSPO.Show
 End Sub
 
-Sub SetDirectory(control As IRibbonControl) ' Á¶Á÷(ºÎ¼­) ¼³Á¤
+Sub SetDirectory(control As IRibbonControl) ' ï¿½ï¿½ï¿½ï¿½(ï¿½Î¼ï¿½) ï¿½ï¿½ï¿½ï¿½
     'ValidatePermission
     frmDirectory.Show
 End Sub
 
-Sub SetDate(control As IRibbonControl) ' °á»ê¿¬¿ù ¼³Á¤
+Sub SetDate(control As IRibbonControl) ' ï¿½ï¿½ê¿¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     'ValidatePermission
     frmDate.Show
 End Sub
 
-Sub AppendCorp(control As IRibbonControl) ' ¹ýÀÎ¸í Ãß°¡
+Sub AppendCorp(control As IRibbonControl) ' ï¿½ï¿½ï¿½Î¸ï¿½ ï¿½ß°ï¿½
     'ValidatePermission
     frmCorp_Append.Show
 End Sub
 
-Sub SetScope(control As IRibbonControl) ' Scope ¼³Á¤
+Sub SetScope(control As IRibbonControl) ' Scope ï¿½ï¿½ï¿½ï¿½
     'ValidatePermission
     frmScope.Show
 End Sub
 
 ' ==================== EXCHANGE RATE GROUP (NEW FOR HRE) ====================
-
-Sub GetER_Flow(control As IRibbonControl) ' Æò±ÕÈ¯À² Á¶È¸
-    'ValidatePermission
-    Call mod_17_ExchangeRate.GetER_Flow
-End Sub
-
-Sub GetER_Spot(control As IRibbonControl) ' ±â¸»È¯À² Á¶È¸
-    'ValidatePermission
-    Call mod_17_ExchangeRate.GetER_Spot
-End Sub
+' GetER_Flow and GetER_Spot are defined in mod_17_ExchangeRate
+' Ribbon calls them directly via onAction
 
 ' ==================== COA GROUP ====================
 
-Sub Synchro_CoA(control As IRibbonControl) ' CoA µ¿±âÈ­
+Sub Synchro_CoA(control As IRibbonControl) ' CoA ï¿½ï¿½ï¿½ï¿½È­
     'ValidatePermission
     Call SyncCoA
 End Sub
 
-Sub Update(control As IRibbonControl) ' CoA È®ÀÎ ¹× µ¥ÀÌÅÍ ÇÕ»ê
+Sub Update(control As IRibbonControl) ' CoA È®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Õ»ï¿½
     'ValidatePermission
     Call QueryRefresh
     Call HighlightPTB
@@ -68,7 +60,7 @@ End Sub
 
 ' ==================== VERIFICATION GROUP ====================
 
-Sub Verify_BSPL(control As IRibbonControl) ' Àç¹«Á¦Ç¥ °ËÁõ
+Sub Verify_BSPL(control As IRibbonControl) ' ï¿½ç¹«ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½
     'ValidatePermission
     Application.DisplayAlerts = False
     Call RefreshPivotVerify
@@ -79,14 +71,14 @@ Sub Verify_BSPL(control As IRibbonControl) ' Àç¹«Á¦Ç¥ °ËÁõ
     Application.DisplayAlerts = True
 End Sub
 
-Sub Update_AD(control As IRibbonControl) ' CoA È®ÀÎ ¹× µ¥ÀÌÅÍ ÇÕ»ê(Ãëµæ, Ã³ºÐ)
+Sub Update_AD(control As IRibbonControl) ' CoA È®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Õ»ï¿½(ï¿½ï¿½ï¿½, Ã³ï¿½ï¿½)
     'ValidatePermission
     Call QueryRefresh_ADBS
     Call Highlight_ADBS
     Call Filter_ADBS
 End Sub
 
-Sub Verify_AD(control As IRibbonControl) ' °ËÁõ ½ÇÇà(Ãëµæ, Ã³ºÐ)
+Sub Verify_AD(control As IRibbonControl) ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½, Ã³ï¿½ï¿½)
     'ValidatePermission
     Application.DisplayAlerts = False
     Call RefreshPivot_ADBS
@@ -98,82 +90,82 @@ Sub Verify_AD(control As IRibbonControl) ' °ËÁõ ½ÇÇà(Ãëµæ, Ã³ºÐ)
     Application.DisplayAlerts = True
 End Sub
 
-Sub Verify_Master(control As IRibbonControl) ' CoA ¸¶½ºÅÍ °ËÁõ
+Sub Verify_Master(control As IRibbonControl) ' CoA ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     'ValidatePermission
     Call VerifyMaster
 End Sub
 
 ' ==================== UTILITY GROUP ====================
 
-Sub FilterSheet(control As IRibbonControl) ' ÇÊÅÍ¸µ
+Sub FilterSheet(control As IRibbonControl) ' ï¿½ï¿½ï¿½Í¸ï¿½
     Dim ws As Worksheet
     Set ws = ActiveSheet
     'ValidatePermission
-    If ws.Name = "¹ýÀÎº° CoA" Or ws.Name = "CoA ¸¶½ºÅÍ" Or ws.Name = "ÇÕ»ê BSPL" Or ws.Name = "Ãëµæ, Ã³ºÐ BS" Then
+    If ws.Name = "ï¿½ï¿½ï¿½Îºï¿½ CoA" Or ws.Name = "CoA ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" Or ws.Name = "ï¿½Õ»ï¿½ BSPL" Or ws.Name = "ï¿½ï¿½ï¿½, Ã³ï¿½ï¿½ BS" Then
         Call DoFilter
-    ElseIf ws.Name = "CoA ¸¶½ºÅÍ" Then
+    ElseIf ws.Name = "CoA ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" Then
         Call DoFilter_Master
     Else
-        GoEnd "ÇØ´ç ½ÃÆ®¿¡¼­´Â ÇÊÅÍ¸µ ±â´ÉÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù."
+        GoEnd "ï¿½Ø´ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."
     End If
     Set ws = Nothing
 End Sub
 
-Sub UnfilterSheet(control As IRibbonControl) ' ÇÊÅÍ¸µ ÇØÁ¦
+Sub UnfilterSheet(control As IRibbonControl) ' ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     Dim ws As Worksheet
     Set ws = ActiveSheet
     'ValidatePermission
-    If ws.Name = "¹ýÀÎº° CoA" Or ws.Name = "CoA ¸¶½ºÅÍ" Or ws.Name = "ÇÕ»ê BSPL" Or ws.Name = "Ãëµæ, Ã³ºÐ BS" Then
+    If ws.Name = "ï¿½ï¿½ï¿½Îºï¿½ CoA" Or ws.Name = "CoA ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" Or ws.Name = "ï¿½Õ»ï¿½ BSPL" Or ws.Name = "ï¿½ï¿½ï¿½, Ã³ï¿½ï¿½ BS" Then
         Call UndoFilter
-    ElseIf ws.Name = "CoA ¸¶½ºÅÍ" Then
+    ElseIf ws.Name = "CoA ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" Then
         Call UndoFilter_Master
     Else
-        GoEnd "ÇØ´ç ½ÃÆ®¿¡¼­´Â ÇÊÅÍ ÇØÁ¦¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù."
+        GoEnd "ï¿½Ø´ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."
     End If
     Set ws = Nothing
 End Sub
 
-Sub ProtectQuery(control As IRibbonControl) ' Äõ¸® Àá±Ý
+Sub ProtectQuery(control As IRibbonControl) ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     'ValidatePermission
     Call ProtectQueryEditor
 End Sub
 
-Sub UnprotectQuery(control As IRibbonControl) ' Äõ¸® Àá±Ý ÇØÁ¦
+Sub UnprotectQuery(control As IRibbonControl) ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     'ValidatePermission
     Call UnprotectQueryEditor
 End Sub
 
-Sub Refresh_Data(control As IRibbonControl) ' Äõ¸® »õ·Î°íÄ§
+Sub Refresh_Data(control As IRibbonControl) ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î°ï¿½Ä§
     'ValidatePermission
     Call RefreshAllData
 End Sub
 
-Sub Manage_People(control As IRibbonControl) ' »ç¿ëÀÚ °ü¸®
+Sub Manage_People(control As IRibbonControl) ' ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     'ValidatePermission
     frmPeople.Show
 End Sub
 
 ' ==================== EXPORT GROUP ====================
 
-Sub Export_File(control As IRibbonControl) ' ÆÄÀÏ ³»º¸³»±â (¿¢¼¿)
+Sub Export_File(control As IRibbonControl) ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½)
     'ValidatePermission
     Call Export_Master
 End Sub
 
 ' ==================== INFO GROUP ====================
 
-Sub IRVersion(control As IRibbonControl) ' ¹öÀü È®ÀÎ
-    Msg "ÇöÀç ¹öÀü: " & AppVersion & vbNewLine & "¹èÆ÷ÀÏ: " & RelDate & vbNewLine & "¸¸·áÀÏ: " & ExpDate
+Sub IRVersion(control As IRibbonControl) ' ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+    Msg "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: " & AppVersion & vbNewLine & "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: " & RelDate & vbNewLine & "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: " & ExpDate
 End Sub
 
-Sub IRSPO(control As IRibbonControl) ' SPO »çÀÌÆ® ¿­±â
+Sub IRSPO(control As IRibbonControl) ' SPO ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     Call OpenSPO
 End Sub
 
-Sub IRBugReport(control As IRibbonControl) ' ¹ö±× ¸®Æ÷Æ®
+Sub IRBugReport(control As IRibbonControl) ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
     Call OpenGoogleForm
 End Sub
 
-Sub IRManual(control As IRibbonControl) ' ¸Å´º¾ó ¿­±â
+Sub IRManual(control As IRibbonControl) ' ï¿½Å´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     Call OpenManual
 End Sub

@@ -2,13 +2,13 @@ Attribute VB_Name = "mod_17_ExchangeRate"
 Option Explicit
 ' ============================================================================
 ' Module: mod_17_ExchangeRate
-' Project: HRE ¿¬°á¸¶½ºÅÍ (Consolidation Master)
+' Project: HRE ï¿½ï¿½ï¿½á¸¶ï¿½ï¿½ï¿½ï¿½ (Consolidation Master)
 ' Version: 1.00
 ' Date: 2026-01-21
 '
 ' Description: Exchange rate fetching from KEB Hana Bank API
 ' Fetches both average exchange rates (for P&L) and spot rates (for B/S)
-' Handles special currencies (JPY, VND, IDR with È¯»ê=100)
+' Handles special currencies (JPY, VND, IDR with È¯ï¿½ï¿½=100)
 ' Adds KRW baseline automatically
 '
 ' SECURITY NOTE: HTML parsing uses innerHTML on a trusted source
@@ -19,8 +19,8 @@ Option Explicit
 ' ==================== PUBLIC FUNCTIONS ====================
 
 ' GetER_Flow - Fetch average exchange rates for a period (P&L items)
-' Called from ribbon button "Æò±ÕÈ¯À² Á¶È¸"
-Sub GetER_Flow()
+' Called from ribbon button "ï¿½ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½È¸"
+Sub GetER_Flow(Optional control As Variant = Nothing)
     Dim StartDate As Date, EndDate As Date, newSheetName As String, ws As Worksheet
     Dim html As Object, lastRow As Long, i As Long
     Dim splitValues As Variant
@@ -28,65 +28,65 @@ Sub GetER_Flow()
 
     On Error Resume Next
 
-    ' ½ÃÀÛ ³¯Â¥¿Í Á¾·á ³¯Â¥ ¼±ÅÃ (¿À´Ã ³¯Â¥±îÁö¸¸ ¼±ÅÃ °¡´É)
-    frmCalendar.Caption = "½ÃÀÛÀÏÀ» ¼±ÅÃÇÏ¼¼¿ä."
+    ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+    frmCalendar.Caption = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½."
     StartDate = frmCalendar.GetDate(xlNextToCursor, 3)
 
     If StartDate = 0 Or StartDate > Date Then
-        MsgBox "À¯È¿ÇÏÁö ¾ÊÀº ½ÃÀÛ ³¯Â¥ÀÔ´Ï´Ù. ¿À´Ã ¶Ç´Â ÀÌÀü ³¯Â¥¸¦ ¼±ÅÃÇØÁÖ¼¼¿ä.", vbExclamation
+        MsgBox "ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½Ô´Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.", vbExclamation
         Exit Sub
     End If
 
-    frmCalendar.Caption = "Á¾·áÀÏÀ» ¼±ÅÃÇÏ¼¼¿ä."
+    frmCalendar.Caption = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½."
     EndDate = frmCalendar.GetDate(xlNextToCursor, 3)
     If EndDate = 0 Or EndDate > Date Or EndDate < StartDate Then
-        MsgBox "À¯È¿ÇÏÁö ¾ÊÀº Á¾·á ³¯Â¥ÀÔ´Ï´Ù. ½ÃÀÛ ³¯Â¥ ÀÌÈÄºÎÅÍ ¿À´Ã±îÁöÀÇ ³¯Â¥¸¦ ¼±ÅÃÇØÁÖ¼¼¿ä.", vbExclamation
+        MsgBox "ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½Ô´Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ ï¿½ï¿½ï¿½Äºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.", vbExclamation
         Exit Sub
     End If
 
     ' Clear existing sheets with same name
     Application.DisplayAlerts = False
     For Each sheet In ThisWorkbook.Sheets
-        If Left(sheet.Name, 9) = "È¯À²Á¤º¸(Æò±Õ)" Then
+        If Left(sheet.Name, 9) = "È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½)" Then
             sheet.Cells.Clear
         End If
     Next sheet
     Application.DisplayAlerts = True
 
-    ' ½ÃÆ® ÁØºñ
-    newSheetName = "È¯À²Á¤º¸(Æò±Õ)"
+    ' ï¿½ï¿½Æ® ï¿½Øºï¿½
+    newSheetName = "È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½)"
     Set ws = PrepareSheet(newSheetName)
 
-    ws.Range("A1").Value = "Á¶È¸ ±â°£ : " & Format(StartDate, "yyyy-mm-dd") & " ~ " & Format(EndDate, "yyyy-mm-dd")
+    ws.Range("A1").Value = "ï¿½ï¿½È¸ ï¿½â°£ : " & Format(StartDate, "yyyy-mm-dd") & " ~ " & Format(EndDate, "yyyy-mm-dd")
 
-    ' 1¿ù 1ÀÏ °øÈÞÀÏ Ã³¸®
+    ' 1ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     If Format(StartDate, "mm-dd") = "01-01" Then
         StartDate = DateSerial(Year(StartDate), 1, 2)
-        ws.Range("A1").Value = "Á¶È¸ ±â°£ : " & Format(StartDate, "yyyy-mm-dd") & " ~ " & Format(EndDate, "yyyy-mm-dd") & " (1¿ù 1ÀÏÀº °øÈÞÀÏÀÌ¹Ç·Î 1¿ù 2ÀÏºÎÅÍ·Î Á¶È¸)"
+        ws.Range("A1").Value = "ï¿½ï¿½È¸ ï¿½â°£ : " & Format(StartDate, "yyyy-mm-dd") & " ~ " & Format(EndDate, "yyyy-mm-dd") & " (1ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹Ç·ï¿½ 1ï¿½ï¿½ 2ï¿½Ïºï¿½ï¿½Í·ï¿½ ï¿½ï¿½È¸)"
     End If
 
-    ' HTML µ¥ÀÌÅÍ °¡Á®¿À±â ¹× Ã³¸® (from trusted KEB Hana Bank API)
+    ' HTML ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½ (from trusted KEB Hana Bank API)
     Set html = CreateObject("htmlfile")
     Dim htmlResponse As String
     htmlResponse = GetHtmlFlow("https://www.kebhana.com/cms/rate/wpfxd651_06i_01.do", StartDate, EndDate)
     html.body.innerHTML = htmlResponse
 
     PutIntoClipboard html.getElementsByClassName("tblBasic")(0).outerHTML
-    ws.Range("A2").Value = "¡Ø Á¶È¸ÀÏÀÌ Åä/ÀÏ/°øÈÞÀÏ ¶Ç´Â ÀºÇà¿µ¾÷ÀÏ 1È¸Â÷ °í½Ã ÀüÀÎ °æ¿ì, Àü ¿µ¾÷ÀÏÀÚ·Î Á¶È¸µË´Ï´Ù."
+    ws.Range("A2").Value = "ï¿½ï¿½ ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½/ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½à¿µï¿½ï¿½ï¿½ï¿½ 1È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½ï¿½È¸ï¿½Ë´Ï´ï¿½."
     ws.Range("A4").PasteSpecial
 
     lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).row
 
-    ' ÇÏÀÌÆÛ¸µÅ© Á¦°Å
+    ' ï¿½ï¿½ï¿½ï¿½ï¿½Û¸ï¿½Å© ï¿½ï¿½ï¿½ï¿½
     RemoveHyperlinks ws
 
-    ' B¿­°ú C¿­¿¡ ÅëÈ­ ÄÚµå¿Í È¯»ê Á¤º¸ Ãß°¡
+    ' Bï¿½ï¿½ï¿½ï¿½ Cï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½Úµï¿½ï¿½ È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     ws.Columns("B:C").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
     Application.DisplayAlerts = False
-    ws.Range("A5").Value = "±¹°¡¸í ¹× ÅëÈ­"
-    ws.Range("B5:B7").Value = "ÅëÈ­"
+    ws.Range("A5").Value = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È­"
+    ws.Range("B5:B7").Value = "ï¿½ï¿½È­"
     ws.Range("B5:B7").Merge
-    ws.Range("C5:C7").Value = "È¯»ê"
+    ws.Range("C5:C7").Value = "È¯ï¿½ï¿½"
     ws.Range("C5:C7").Merge
     Application.DisplayAlerts = True
 
@@ -98,7 +98,7 @@ Sub GetER_Flow()
             ws.Cells(i, 2).Value = ""
         End If
 
-        ' Special handling for JPY, VND, IDR (È¯»ê=100)
+        ' Special handling for JPY, VND, IDR (È¯ï¿½ï¿½=100)
         If splitValues(1) = "JPY" Or splitValues(1) = "VND" Or splitValues(1) = "IDR" Then
             ws.Cells(i, 3).Value = 100
         Else
@@ -106,17 +106,17 @@ Sub GetER_Flow()
         End If
     Next i
 
-    ' ´ëÇÑ¹Î±¹ KRW Á¤º¸ Ãß°¡ (baseline)
+    ' ï¿½ï¿½ï¿½Ñ¹Î±ï¿½ KRW ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ (baseline)
     lastRow = lastRow + 1
-    ws.Cells(lastRow, 1).Value = "´ëÇÑ¹Î±¹ KRW"
+    ws.Cells(lastRow, 1).Value = "ï¿½ï¿½ï¿½Ñ¹Î±ï¿½ KRW"
     ws.Cells(lastRow, 2).Value = "KRW"
     ws.Cells(lastRow, 3).Value = 1
     ws.Cells(lastRow, 11).Value = 1
 
-    ' ¼­½Ä Àû¿ë
+    ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     ApplyFormatting ws, lastRow
 
-    ' ´«±Ý¼± Á¦°Å
+    ' ï¿½ï¿½ï¿½Ý¼ï¿½ ï¿½ï¿½ï¿½ï¿½
     RemoveGridlines ws
 
     Application.CutCopyMode = False
@@ -130,7 +130,7 @@ Sub GetER_Flow()
     ' Update Check sheet workflow status (Row 20)
     Call UpdateCheckStatus(20, "Complete")
 
-    MsgBox "Æò±ÕÈ¯À² Á¤º¸°¡ ¾÷µ¥ÀÌÆ®µÇ¾ú½À´Ï´Ù.", vbInformation
+    MsgBox "ï¿½ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.", vbInformation
 
     Set html = Nothing
     Set ws = Nothing
@@ -138,8 +138,8 @@ Sub GetER_Flow()
 End Sub
 
 ' GetER_Spot - Fetch spot exchange rates for a specific date (B/S items)
-' Called from ribbon button "±â¸»È¯À² Á¶È¸"
-Sub GetER_Spot()
+' Called from ribbon button "ï¿½â¸»È¯ï¿½ï¿½ ï¿½ï¿½È¸"
+Sub GetER_Spot(Optional control As Variant = Nothing)
     Dim selectedDate As Date, newSheetName As String, ws As Worksheet
     Dim html As Object, lastRow As Long, i As Long
     Dim splitValues As Variant
@@ -147,51 +147,51 @@ Sub GetER_Spot()
 
     On Error Resume Next
 
-    ' ³¯Â¥ ¼±ÅÃ (¿À´Ã ³¯Â¥±îÁö¸¸ ¼±ÅÃ °¡´É)
-    frmCalendar.Caption = "±âÁØÀÏÀ» ¼±ÅÃÇÏ¼¼¿ä."
+    ' ï¿½ï¿½Â¥ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+    frmCalendar.Caption = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½."
     selectedDate = frmCalendar.GetDate(xlNextToCursor, 3)
     If selectedDate = 0 Or selectedDate > Date Then
-        MsgBox "À¯È¿ÇÏÁö ¾ÊÀº ³¯Â¥ÀÔ´Ï´Ù. ¿À´Ã ¶Ç´Â ÀÌÀü ³¯Â¥¸¦ ¼±ÅÃÇØÁÖ¼¼¿ä.", vbExclamation
+        MsgBox "ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½Ô´Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.", vbExclamation
         Exit Sub
     End If
 
     ' Clear existing sheets with same name
     Application.DisplayAlerts = False
     For Each sheet In ThisWorkbook.Sheets
-        If Left(sheet.Name, 9) = "È¯À²Á¤º¸(ÀÏÀÚ)" Then
+        If Left(sheet.Name, 9) = "È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)" Then
             sheet.Cells.Clear
         End If
     Next sheet
     Application.DisplayAlerts = True
 
-    ' ½ÃÆ® ÁØºñ
-    newSheetName = "È¯À²Á¤º¸(ÀÏÀÚ)"
+    ' ï¿½ï¿½Æ® ï¿½Øºï¿½
+    newSheetName = "È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)"
     Set ws = PrepareSheet(newSheetName)
 
-    ws.Range("A1").Value = "Á¶È¸ ±âÁØÀÏ : " & Format(selectedDate, "yyyy-mm-dd")
+    ws.Range("A1").Value = "ï¿½ï¿½È¸ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : " & Format(selectedDate, "yyyy-mm-dd")
 
-    ' HTML µ¥ÀÌÅÍ °¡Á®¿À±â ¹× Ã³¸® (from trusted KEB Hana Bank API)
+    ' HTML ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½ (from trusted KEB Hana Bank API)
     Set html = CreateObject("htmlfile")
     Dim htmlResponse As String
     htmlResponse = GetHtmlSpot("https://www.kebhana.com/cms/rate/wpfxd651_01i_01.do", selectedDate)
     html.body.innerHTML = htmlResponse
 
     PutIntoClipboard html.getElementsByClassName("tblBasic")(0).outerHTML
-    ws.Range("A2").Value = "¡Ø Á¶È¸ÀÏÀÌ Åä/ÀÏ/°øÈÞÀÏ ¶Ç´Â ÀºÇà¿µ¾÷ÀÏ 1È¸Â÷ °í½Ã ÀüÀÎ °æ¿ì, Àü ¿µ¾÷ÀÏÀÚ·Î Á¶È¸µË´Ï´Ù."
+    ws.Range("A2").Value = "ï¿½ï¿½ ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½/ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½à¿µï¿½ï¿½ï¿½ï¿½ 1È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½ï¿½È¸ï¿½Ë´Ï´ï¿½."
     ws.Range("A4").PasteSpecial
 
     lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).row
 
-    ' ÇÏÀÌÆÛ¸µÅ© Á¦°Å
+    ' ï¿½ï¿½ï¿½ï¿½ï¿½Û¸ï¿½Å© ï¿½ï¿½ï¿½ï¿½
     RemoveHyperlinks ws
 
-    ' B¿­°ú C¿­¿¡ ÅëÈ­ ÄÚµå¿Í È¯»ê Á¤º¸ Ãß°¡
+    ' Bï¿½ï¿½ï¿½ï¿½ Cï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½Úµï¿½ï¿½ È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     ws.Columns("B:C").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
     Application.DisplayAlerts = False
-    ws.Range("A5").Value = "±¹°¡¸í ¹× ÅëÈ­"
-    ws.Range("B5:B7").Value = "ÅëÈ­"
+    ws.Range("A5").Value = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È­"
+    ws.Range("B5:B7").Value = "ï¿½ï¿½È­"
     ws.Range("B5:B7").Merge
-    ws.Range("C5:C7").Value = "È¯»ê"
+    ws.Range("C5:C7").Value = "È¯ï¿½ï¿½"
     ws.Range("C5:C7").Merge
     Application.DisplayAlerts = True
 
@@ -203,7 +203,7 @@ Sub GetER_Spot()
             ws.Cells(i, 2).Value = ""
         End If
 
-        ' For spot rates, È¯»ê value is in parentheses (e.g., "USD (1)")
+        ' For spot rates, È¯ï¿½ï¿½ value is in parentheses (e.g., "USD (1)")
         If UBound(splitValues) >= 3 Then
             ws.Cells(i, 3).Value = Replace(Replace(splitValues(2), "(", ""), ")", "")
         Else
@@ -211,17 +211,17 @@ Sub GetER_Spot()
         End If
     Next i
 
-    ' ´ëÇÑ¹Î±¹ KRW Á¤º¸ Ãß°¡ (baseline)
+    ' ï¿½ï¿½ï¿½Ñ¹Î±ï¿½ KRW ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ (baseline)
     lastRow = lastRow + 1
-    ws.Cells(lastRow, 1).Value = "´ëÇÑ¹Î±¹ KRW"
+    ws.Cells(lastRow, 1).Value = "ï¿½ï¿½ï¿½Ñ¹Î±ï¿½ KRW"
     ws.Cells(lastRow, 2).Value = "KRW"
     ws.Cells(lastRow, 3).Value = 1
     ws.Cells(lastRow, 11).Value = 1
 
-    ' ¼­½Ä Àû¿ë
+    ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     ApplyFormatting ws, lastRow
 
-    ' ´«±Ý¼± Á¦°Å
+    ' ï¿½ï¿½ï¿½Ý¼ï¿½ ï¿½ï¿½ï¿½ï¿½
     RemoveGridlines ws
 
     Application.CutCopyMode = False
@@ -235,7 +235,7 @@ Sub GetER_Spot()
     ' Update Check sheet workflow status (Row 20)
     Call UpdateCheckStatus(20, "Complete")
 
-    MsgBox "±â¸»È¯À² Á¤º¸°¡ ¾÷µ¥ÀÌÆ®µÇ¾ú½À´Ï´Ù.", vbInformation
+    MsgBox "ï¿½â¸»È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.", vbInformation
 
     Set html = Nothing
     Set ws = Nothing
@@ -283,7 +283,7 @@ Private Sub ApplyFormatting(ws As Worksheet, lastRow As Long)
     Dim formatRange As Range
     Set formatRange = ws.Range("A5:M" & lastRow)
 
-    ' Å×µÎ¸® Ãß°¡
+    ' ï¿½×µÎ¸ï¿½ ï¿½ß°ï¿½
     With formatRange.Borders
         .LineStyle = xlContinuous
         .ColorIndex = 0
@@ -292,22 +292,22 @@ Private Sub ApplyFormatting(ws As Worksheet, lastRow As Long)
     End With
     formatRange.BorderAround Weight:=xlMedium
 
-    ' Çà ³ôÀÌ ¼³Á¤
+    ' ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     ws.Range("A5:M" & lastRow).RowHeight = 12
 
-    ' ±Û²Ã ¼³Á¤
+    ' ï¿½Û²ï¿½ ï¿½ï¿½ï¿½ï¿½
     With formatRange.Font
-        .Name = "¸¼Àº °íµñ"
+        .Name = "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½"
         .Size = 10
     End With
 
-    ' Á¦¸ñ Çà ±½°Ô ¼³Á¤
+    ' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     With ws.Range("A4:M4")
         .Font.Bold = True
         .RowHeight = 15
     End With
 
-    ' Ã¹ ¹øÂ°¿Í µÎ ¹øÂ° Çà ³ôÀÌ Á¶Á¤
+    ' Ã¹ ï¿½ï¿½Â°ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Â° ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     ws.Range("A1:M2").RowHeight = 15
 
     With Application
